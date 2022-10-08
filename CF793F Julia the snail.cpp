@@ -59,35 +59,56 @@ const int INF=1000114514;
 
 const int N=1e6+7;
 
-int n,m,q,mx[N*4];
+int n,m,q,mn[N*4],tag[N*4],ans[N];
 
 struct line{
-    int l,r;
-    line(int l=0,int r=0):l(l),r(r){}
+    int l,r,id;
+    line(int l=0,int r=0,int id=0):l(l),r(r),id(id){}
     bool operator < (const line& _)const{return r<_.r;}
 }a[N],b[N];
 
+void pushdown(int id){
+    if(tag[id]){
+        _max(mn[id],tag[id]);
+        _max(tag[Lid],tag[id]),_max(tag[Rid],tag[id]);
+        tag[id]=0;
+    }
+    return;
+}
+
 void update(int L,int R,int id,int l,int r,int v){
+    pushdown(id);
     if(r<L||R<l)return;
-    _max(mx[id],v);
-    if(!(l<=L&&r>=R))update(L,M,Lid,l,r,v),update(M+1,R,Rid,l,r,v);
+    if(l<=L&&r>=R)tag[id]=v,pushdown(id);
+    else{
+        update(L,M,Lid,l,r,v),update(M+1,R,Rid,l,r,v);
+        mn[id]=min(mn[Lid],mn[Rid]);
+    }
     return;
 }
 
 int query(int L,int R,int id,int l,int r){
-    if(L)
+    pushdown(id);
+    if(r<L||R<l)return 0;
+    if(l<=L&&r>=R&&mn[id]>=l)return 0;
+    if(L==R)return L;
+    int res=query(L,M,Lid,l,r);
+    if(res)return res;
+    return query(M+1,R,Rid,l,r);
 }
 
 signed main(){
     n=read(),m=read();
-    for(int i=1,l,r;i<=m;i++)l=read(),r=read(),a[i]=line(l,r);
+    for(int i=1,l,r;i<=m;i++)l=read(),r=read(),a[i]=line(l,r,i);
     sort(a+1,a+m+1);
     q=read();
-    for(int i=1,l,r;i<=q;i++)l=read(),r=read(),b[i]=line(l,r);
+    for(int i=1,l,r;i<=q;i++)l=read(),r=read(),b[i]=line(l,r,i);
     sort(b+1,b+q+1);
     for(int i=1,j=1;i<=q;i++){
-        while(j<=m&&a[j].r<=b[i].r)update(1,n,1,b[i].l,b[i].r,b[i].l);
+        while(j<=m&&a[j].r<=b[i].r)update(1,n,1,a[j].l,a[j].r-1,a[j].l),++j;
         int p=query(1,n,1,b[i].l,b[i].r);
+        ans[b[i].id]=p;
     }
+    for(int i=1;i<=q;i++)_write(ans[i]);
     return 0;
 }
