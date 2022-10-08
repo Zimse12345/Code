@@ -1,0 +1,6 @@
+*.exe
+*.zip
+*.in
+*.out
+*.ans
+.vscode/

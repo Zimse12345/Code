@@ -1,0 +1,1 @@
+type *.cpp>>merge.cpp
