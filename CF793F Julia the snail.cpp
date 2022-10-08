@@ -25,10 +25,10 @@
 #define yes _Yes()
 #define no _No()
 #define ll long long
-//#define int long long
-//#define M ((L+R)/2)
-//#define Lid (id<<1)
-//#define Rid (Lid|1)
+// #define int long long
+#define M ((L+R)/2)
+#define Lid (id<<1)
+#define Rid (Lid|1)
 //#define Lid ch[id][0]
 //#define Rid ch[id][1]
 
@@ -59,17 +59,35 @@ const int INF=1000114514;
 
 const int N=1e6+7;
 
-int n,m,q;
+int n,m,q,mx[N*4];
 
 struct line{
     int l,r;
     line(int l=0,int r=0):l(l),r(r){}
     bool operator < (const line& _)const{return r<_.r;}
-}a[N];
+}a[N],b[N];
+
+void update(int L,int R,int id,int l,int r,int v){
+    if(r<L||R<l)return;
+    _max(mx[id],v);
+    if(!(l<=L&&r>=R))update(L,M,Lid,l,r,v),update(M+1,R,Rid,l,r,v);
+    return;
+}
+
+int query(int L,int R,int id,int l,int r){
+    if(L)
+}
 
 signed main(){
     n=read(),m=read();
     for(int i=1,l,r;i<=m;i++)l=read(),r=read(),a[i]=line(l,r);
-    sort(a+1,a+n+1);
+    sort(a+1,a+m+1);
+    q=read();
+    for(int i=1,l,r;i<=q;i++)l=read(),r=read(),b[i]=line(l,r);
+    sort(b+1,b+q+1);
+    for(int i=1,j=1;i<=q;i++){
+        while(j<=m&&a[j].r<=b[i].r)update(1,n,1,b[i].l,b[i].r,b[i].l);
+        int p=query(1,n,1,b[i].l,b[i].r);
+    }
     return 0;
 }
