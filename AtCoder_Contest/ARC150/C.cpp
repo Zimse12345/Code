@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-09-
+*Data:
 *Description:
 *Other:
 ********************************/
@@ -37,7 +37,7 @@ using namespace std;
 namespace Zimse{
 const int Mod=998244353;
 //const int Mod=1000000007;
-inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c){if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
+inline int read(){int x=0,y=1;char c=gc();while(c<48||c>57){if(c==45)y=-1;c=gc();}while(c>=48&&c<=57)x=x*10+c-48,c=gc();return x*y;}
 inline void write(int x){if(x<0)pc(45),x=-x;if(x>=10)write(x/10);pc(48+x%10);return;}
 inline void _Yes(){pc(89),pc(101),pc(115),pc(10);return;}
 inline void _No(){pc(78),pc(111),pc(10);return;}
@@ -51,7 +51,7 @@ inline ll fpow(ll x,ll y){ll res=1ll;while(y){if(y&1ll)res=res*x%Mod;x=x*x%Mod,y
 inline ll inv(ll x){return fpow(x,Mod-2);}
 inline int _gcd(int x,int y){return y?_gcd(y,x%y):x;}
 inline int _abs(int x){return x<0?-x:x;}
-inline void _max(int& x,int y){if(x<y)x=y;return;}
+inline void _max(int& x,int y){if(y>x)x=y;return;}
 inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
@@ -59,9 +59,48 @@ const int INF=1000114514;
 
 const int N=1e6+7;
 
+int n,m,k,hd[N],nxt[N],to[N],ec,a[N],b[N],dis[N],vis[N];
 
+struct node{
+	int x,y;
+	node(int x=0,int y=0):x(x),y(y){}
+	bool operator < (const node& _)const{return  y>_.y;}
+};
+priority_queue<node> q;
+
+inline void add(int u,int v){
+	nxt[++ec]=hd[u],hd[u]=ec,to[ec]=v;
+	return;
+}
 
 signed main(){
-
-    return 0;
+	n=read(),m=read(),k=read();
+	for(int i=1,u,v;i<=m;i++){
+		u=read(),v=read();
+		add(u,v),add(v,u);
+	}
+	for(int i=1;i<=n;i++)a[i]=read();
+	for(int i=1;i<=k;i++)b[i]=read();
+	for(int i=1;i<=n;i++)dis[i]=k;
+	if(b[1]==a[1])dis[1]=1;
+	else dis[1]=0;
+	q.push(node(1,dis[1]));
+	while(!q.empty()){
+		int u=q.top().x;
+		q.pop();
+		if(vis[u]++)continue;
+		for(int i=hd[u],v;i;i=nxt[i]){
+			v=to[i];
+			int _d=dis[u];
+			if(_d<n&&b[_d+1]==a[v])++_d;
+			if(_d<dis[v]){
+				dis[v]=_d;
+				q.push(node(v,_d));
+			}
+		}
+	}
+	_ck(dis[n]==k);
+	return 0;
 }
+
+
