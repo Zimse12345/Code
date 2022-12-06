@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,22 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,a[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read();
+		int t=1;
+		if(n&1)t=0;
+		else{
+			for(int i=3;i<=n;i++)if(a[i]!=a[i-2])t=0;
+		}
+		if(t)printf("%d\n",n/2+1);
+		else printf("%d\n",n);
+	}
     return 0;
 }
+
+

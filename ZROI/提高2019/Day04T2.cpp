@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -26,12 +26,12 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
-// #define M ((L+R)/2)
-// #define Lid (id<<1)
-// #define Rid (Lid|1)
-// #define Lid ch[id][0]
-// #define Rid ch[id][1]
+//#define int long long
+#define M ((L+R)/2)
+//#define Lid (id<<1)
+//#define Rid (Lid|1)
+//#define Lid ch[id][0]
+//#define Rid ch[id][1]
 
 using namespace std;
 
@@ -60,11 +60,38 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
-const int N=1000007;
+const int N=1000007,V=1000000;
 
-
+int n,a[N],vis[N],p[N],m,pre[N],ansl,ansr,stk[N],top;
+vector<int> pos[N];
 
 signed main(){
-    
+    n=read();
+    for(int i=1;i<=n;i++)a[i]=read(),pos[a[i]].pb(i);
+    for(int i=2;i<=V;i++)if(!vis[i]){
+        m=top=0;
+        for(int j=i;j<=V;j+=i)vis[j]=1;
+        for(int j=i;j<=V;j+=i){
+            for(unsigned k=0;k<pos[j].size();k++)p[++m]=pos[j][k];
+        }
+        sort(p+1,p+m+1);
+        
+        for(int j=1;j<=m;j++){
+            pre[j]=pre[j-1]-(p[j]-p[j-1]-1)+1;
+            int L=1,R=top,s=j;
+            while(L<=R){
+                if(0<=pre[j]-pre[stk[M]]+1)s=stk[M],R=M-1;
+                else L=M+1;
+            }
+            L=p[s],R=p[j];
+            int cnt=(pre[j]-pre[s]+1+(R-L+1))/2;
+            while(cnt*2>R-L+1&&L>1)--L;
+            while(cnt*2>R-L+1&&R<n)++R;
+            if(R-L+1>ansr-ansl+1)ansl=L,ansr=R;
+            if(R-L+1==ansr-ansl+1&&L<ansl)ansl=L,ansr=R;
+            if(!top||pre[j]<pre[stk[top]])stk[++top]=j;
+        }
+    }
+    write_(ansl),_write(ansr);
     return 0;
 }

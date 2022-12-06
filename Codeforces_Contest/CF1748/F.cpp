@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,41 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int n,ans[N],t,a[N],tag,ttag;
 
+void add(int x){
+    if(tag){
+        if(ttag)x=(x-n/2+n+1)%(n+1);
+        else x=(x+n/2)%n;
+    }
+    ans[++t]=x;
+    a[x]^=a[(x+1)%(n+ttag)];
+    return;
+}
+
+void Sol(){
+    if(tag&&(n&1))--n,ttag=1;
+    for(int i=0;i<n/2;i++){
+        int p=n-i-2;
+        while(p>=i)add(p--);
+        ++p;
+        if(p>0)add(p-1);
+        while(p+1<=n-i-2)add(++p);
+    }
+    if(n&1)add(n/2-1);
+    if(tag&&ttag)++n,ttag=0;
+    return;
+}
 
 signed main(){
-    
+    n=read();
+    for(int i=0;i<n;i++)a[i]=1<<i;
+    Sol();
+    tag=1;
+    Sol();
+    tag=0;
+    Sol();
+    _write(t);
+    for(int i=1;i<=t;i++)write_(ans[i]);
     return 0;
 }

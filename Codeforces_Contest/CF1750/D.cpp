@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -26,7 +26,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -62,9 +62,42 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,n,m,a[N],ans,p[N],tot;
 
+int lowbit(int x){
+	return x&(-x);
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),m=read();
+		for(int i=1;i<=n;i++)a[i]=read();
+		ans=1;
+		for(int i=2;i<=n;i++){
+			//gcd(a[i-1],x)=a[i]
+			if(a[i-1]%a[i]!=0){
+				ans=0;
+				break;
+			}
+			int x=a[i-1]/a[i],V=m/a[i];
+			int _x=x,s=0;
+			tot=0;
+			for(int j=2;j*j<=x;j++)if(_x%j==0){
+				while(_x%j==0)_x/=j;
+				p[++tot]=j;
+			}
+			if(_x>1)p[++tot]=_x;
+			for(int j=0;j<(1<<tot);j++){
+				int mu=1,num=1;
+				for(int k=0;k<tot;k++)if(j&(1<<k))mu=-mu,num*=p[k+1];
+				s+=mu*(V/num);
+			}
+			ans=ans*s%Mod;
+		}
+		_write(ans);
+	}
     return 0;
 }
+
+

@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -26,7 +26,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -36,8 +36,8 @@
 using namespace std;
 
 namespace Zimse{
-const int Mod=998244353;
-// const int Mod=1000000007;
+// const int Mod=998244353;
+const int Mod=1000000007;
 
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
@@ -62,9 +62,50 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,n,m,a[N],rt,lc[N],rc[N],tot,ans;
+set<int> pos[N];
+vector<int> f[N];
 
+int build(int L,int R){
+    if(R<L)return 0;
+    int id=++tot;
+    for(int i=m;i>=1;i--){
+        int p=*pos[i].lower_bound(L);
+        if(p>R)continue;
+        lc[id]=build(L,p-1),rc[id]=build(p+1,R);
+        break;
+    }
+    return id;
+}
+
+void dp(int u){
+    if(!u)return;
+    dp(lc[u]),dp(rc[u]);
+    for(int i=1,s0=0,s1=0;i<=m;i++){
+        if(lc[u])addmod(s0,f[lc[u]][i-1]);
+        else s0=1;
+        if(rc[u])addmod(s1,f[rc[u]][i]);
+        else s1=1;
+        f[u][i]=s0*s1%Mod;
+    }
+    return;
+}
 
 signed main(){
-    
+    T=read();
+    while(T--){
+        n=read(),m=read();
+        for(int i=1;i<=m;i++)pos[i].insert(n+1);
+        for(int i=1;i<=n;i++)a[i]=read(),pos[a[i]].insert(i),f[i].resize(m+1);
+        rt=build(1,n);
+
+        dp(1);
+        for(int i=1;i<=m;i++)addmod(ans,f[1][i]);
+        _write(ans);
+
+        for(int i=1;i<=m;i++)pos[i].clear();
+        for(int i=1;i<=n;i++)lc[i]=rc[i]=0,f[i].resize(0);
+        rt=tot=ans=0;
+    }
     return 0;
 }

@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,36 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,n,a[N],b[N];
 
+bool check(int x){
+	int m=n+x,c=m-m/4;
+	int suma=0,sumb=0;
+	if(c<=x)suma=100*x;
+	else{
+		suma=100*x;
+		for(int i=n;i>=1&&i>=n-(c-x)+1;i--)suma+=a[i];
+	}
+	for(int i=n;i>=1&&i>=n-c+1;i--)sumb+=b[i];
+	return suma>=sumb;
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read();
+		for(int i=1;i<=n;i++)b[i]=read();
+		sort(a+1,a+n+1),sort(b+1,b+n+1);
+		int L=0,R=n,ans=n;
+		while(L<=R){
+			int M=(L+R)/2;
+			if(check(M))ans=M,R=M-1;
+			else L=M+1;
+		}
+		_write(ans);
+	}
     return 0;
 }
+
+

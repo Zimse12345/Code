@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,19 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,ans; 
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),ans=0;
+		while(n){
+			_max(ans,n%10);
+			n/=10;
+		}
+		_write(ans);
+	}
     return 0;
 }
+
+

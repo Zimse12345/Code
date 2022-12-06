@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -60,11 +60,24 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
-const int N=1000007;
+const int N=128;
 
-
+int T,n,m,ans[N][N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),m=read();
+		for(int i=1;i<=m-2;i+=2)ans[1][i]=ans[n][i]=1;
+		for(int j=1;j<=n-2;j+=2)ans[j][1]=ans[j][m]=1;
+		ans[1][m]=ans[n][1]=ans[n][m]=1;
+		for(int i=1;i<=n;i++){
+			for(int j=1;j<=m;j++)write(ans[i][j]),ans[i][j]=0;
+			pc(10);
+		}
+		pc(10);
+	}
     return 0;
 }
+
+

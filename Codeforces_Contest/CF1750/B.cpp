@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -26,7 +26,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -62,9 +62,28 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n;
+char s[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		scanf("%s",s+1);
+		int x=0,y=0,ans=0,p0=0,p1=0;
+		for(int i=1;i<=n;i++){
+			if(s[i]=='0'){
+				++x,++p0,p1=0;
+			}
+			else{
+				++y,p0=0,++p1;
+			}
+			_max(ans,max(p0*p0,p1*p1));
+		}
+		_max(ans,x*y);
+		_write(ans);
+	}
     return 0;
 }
+
+

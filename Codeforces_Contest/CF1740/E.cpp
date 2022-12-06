@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,30 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int n,hd[N],nxt[N],to[N],ec,f[N],d[N];
 
+inline void add(int u,int v){
+	nxt[++ec]=hd[u],hd[u]=ec,to[ec]=v;
+	return;
+}
+
+void dfs(int u,int from){
+	for(int i=hd[u],v;i;i=nxt[i]){
+		v=to[i];
+		if(v==from)continue;
+		dfs(v,u);
+		f[u]+=f[v];
+		_max(d[u],d[v]);
+	}
+	++d[u],_max(f[u],d[u]);
+}
 
 signed main(){
-    
+	n=read();
+	for(int i=2,f;i<=n;i++)f=read(),add(f,i),add(i,f);
+	dfs(1,0);
+	_write(f[1]);
     return 0;
 }
+
+

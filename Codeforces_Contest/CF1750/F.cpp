@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -26,7 +26,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -34,9 +34,11 @@
 // #define Rid ch[id][1]
 
 using namespace std;
+int P;
+#define Mod P
 
 namespace Zimse{
-const int Mod=998244353;
+// const int Mod=998244353;
 // const int Mod=1000000007;
 
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
@@ -60,11 +62,23 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
-const int N=1000007;
+const int N=5007;
 
-
+int n,f[N],g[N][N],pre[N][N],s[N];
 
 signed main(){
-    
+    f[1]=g[1][1]=1,n=read(),P=read();
+    for(int i=1;i<=n;i++)pre[1][i]=1,addmod(s[1+i],1);
+    for(int x=2;x<=n;x++){
+        int sum=0;
+        for(int i=1;i<x;i++){
+            if(x-2*i-1>0)addmod(g[x][i],s[x-2*i-1]*f[i]);
+            addmod(sum,g[x][i]);
+        }
+        f[x]=(fpow(2,x-2)-sum+P)%P;
+        g[x][x]=f[x];
+        for(int i=1;i<=n;i++)pre[x][i]=pre[x][i-1]+g[x][i],addmod(s[x+i],pre[x][i]);
+    }
+    _write(f[n]);
     return 0;
 }

@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,15 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,a,b;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),a=read(),b=read();
+		_ck((n==a&&n==b)||(a+b<n-1));
+	}
     return 0;
 }
+
+

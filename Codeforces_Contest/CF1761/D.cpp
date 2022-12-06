@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -26,7 +26,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -36,8 +36,8 @@
 using namespace std;
 
 namespace Zimse{
-const int Mod=998244353;
-// const int Mod=1000000007;
+//const int Mod=998244353;
+ const int Mod=1000000007;
 
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
@@ -62,9 +62,28 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int n,k,fac[N],ifac[N],ans;
 
+int C(int x,int y){
+	if(x<y)return 0;
+	return fac[x]*ifac[y]%Mod*ifac[x-y]%Mod;
+}
 
 signed main(){
-    
+	n=read(),k=read();
+	fac[0]=ifac[0]=1;
+	for(int i=1;i<N;i++)fac[i]=fac[i-1]*i%Mod,ifac[i]=inv(fac[i]);
+	if(k==0){
+		_write(fpow(3,n));
+		return 0;
+	}
+	for(int i=1;i<=k;i++){
+		int p=C(k-1,i-1)*fpow(3,k-i)%Mod;
+		int rm=n-k;
+		addmod(ans,p*(C(rm,i)*fpow(3,rm-i)%Mod+C(rm,i-1)*fpow(3,rm-i+1)%Mod)%Mod);
+	}
+	_write(ans);
     return 0;
 }
+
+

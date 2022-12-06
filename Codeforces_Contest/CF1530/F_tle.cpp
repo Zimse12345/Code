@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -36,7 +36,7 @@
 using namespace std;
 
 namespace Zimse{
-const int Mod=998244353;
+const int Mod=31607;
 // const int Mod=1000000007;
 
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
@@ -60,11 +60,50 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
-const int N=1000007;
+const int N=32;
 
-
+int n,m,a[N][N],f[4000000][4][2],g[4000000][4][2];
 
 signed main(){
-    
-    return 0;
+	n=read(),m=(1<<n);
+	for(int i=0;i<n;i++)for(int j=0;j<n;j++)a[i][j]=read()*inv(10000)%Mod;
+	f[m-1][3][1]=1;
+	for(int x=0;x<n;x++){
+		for(int y=0;y<n;y++){
+			for(int z=0,p;z<2;z++){
+				p=z?a[x][y]:(1-a[x][y]);
+				for(int i=0;i<m;i++){
+					for(int u=0;u<4;u++){
+						for(int w=0;w<2;w++)if(f[i][u][w]!=0){
+							int _i=i,_u=u,_w=w;
+							if(!z){
+								_i&=((m-1)^(1<<y));
+								if(x==y)_u&=2;
+								if(x==n-y-1)_u&=1;
+								_w=0;
+							}
+							addmod(g[_i][_u][_w],f[i][u][w]*p);
+						}
+					}
+				}
+			}
+			for(int i=0;i<m;i++){
+				for(int u=0;u<4;u++){
+					if(y==n-1){
+						f[i][u][1]=g[i][u][0];
+						f[i][u][0]=g[i][u][0]=g[i][u][1]=0;
+						continue;
+					}
+					for(int w=0;w<2;w++){
+						f[i][u][w]=g[i][u][w];
+						g[i][u][w]=0;
+					}
+				}
+			}
+		}
+	}
+	_write((1-f[0][0][1]+Mod)%Mod);
+	return 0;
 }
+
+

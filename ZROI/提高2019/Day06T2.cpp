@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -26,12 +26,12 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
-// #define M ((L+R)/2)
-// #define Lid (id<<1)
-// #define Rid (Lid|1)
-// #define Lid ch[id][0]
-// #define Rid ch[id][1]
+#define int long long
+//#define M ((L+R)/2)
+//#define Lid (id<<1)
+//#define Rid (Lid|1)
+//#define Lid ch[id][0]
+//#define Rid ch[id][1]
 
 using namespace std;
 
@@ -62,9 +62,30 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int n,m,k,a[N],ans[N],cnt[N],fac[N],ifac[N];
 
+inline int C(int x,int y){
+    if(x<y)return 0;
+    return fac[x]*ifac[y]%Mod*ifac[x-y]%Mod;
+}
 
 signed main(){
-    
+    fac[0]=ifac[0]=1;
+    for(int i=1;i<N;i++)fac[i]=fac[i-1]*i%Mod,ifac[i]=inv(fac[i]);
+    n=read(),m=read(),k=read();
+    for(int i=1;i<=n;i++)a[i]=read(),++cnt[a[i]];
+    for(int i=m;i>=1;i--){
+        int s=0;
+        for(int j=i;j<=m;j+=i)s+=cnt[j];
+        int p=fpow(m/i,n-s),p2=fpow(m/i-1,s),v=inv(m/i-1);
+        for(int j=0;j<=n-k&&j<=s;j++){
+            if(s-j==0)p2=1;
+            addmod(ans[i],C(s,j)*p2%Mod*p);
+            p2=p2*v%Mod;
+        }
+        for(int j=i*2;j<=m;j+=i)addmod(ans[i],-ans[j]);
+    }
+    for(int i=1;i<=m;i++)addmod(ans[i],Mod),write_(ans[i]);
+    pc(10);
     return 0;
 }

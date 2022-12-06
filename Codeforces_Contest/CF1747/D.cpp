@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,48 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int n,q,a[N],pre[N],ans[N],cnt0[N];
 
+struct query{
+	int l,id;
+	query(int l=0,int id=0):l(l),id(id){}
+};
+vector<query> qu[N];
+map<int,int> p0,p1;
 
 signed main(){
-    
+	n=read(),q=read();
+	for(int i=1;i<=n;i++)a[i]=read();
+	for(int i=1,l,r;i<=q;i++){
+		ans[i]=-1;
+		l=read(),r=read();
+		qu[r].pb(query(l,i));
+	}
+	p0[0]=0;
+	for(int r=1,l=0;r<=n;r++){
+		pre[r]=pre[r-1]^a[r];
+		cnt0[r]=cnt0[r-1]+(a[r]==0?1:0);
+		for(unsigned i=0;i<qu[r].size();i++){
+			l=qu[r][i].l;
+			if(pre[r]^pre[l-1])continue;
+			int f=-1;
+			if(r&1){
+				if(p0.find(pre[r])!=p0.end())f=p0[pre[r]];
+			}
+			else{
+				if(p1.find(pre[r])!=p1.end())f=p1[pre[r]];
+			}
+			if(f>=l-1){
+				if(cnt0[r]-cnt0[l-1]==r-l+1)ans[qu[r][i].id]=0;
+				else if(((r-l+1)&1)||a[l]==0||a[r]==0)ans[qu[r][i].id]=1;
+				else ans[qu[r][i].id]=2;
+			}
+		}
+		if(r&1)p1[pre[r]]=r;
+		else p0[pre[r]]=r;
+	}
+	for(int i=1;i<=q;i++)_write(ans[i]);
     return 0;
 }
+
+

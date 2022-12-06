@@ -1,6 +1,8 @@
 *.exe
 *.zip
+*.rar
 *.in
 *.out
 *.ans
+ignore.*
 .vscode/

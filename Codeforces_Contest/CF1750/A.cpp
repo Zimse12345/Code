@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,21 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,a[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		a[1]=read();
+		int tag=1;
+		for(int i=2;i<=n;i++){
+			a[i]=read();
+			if(a[i]<a[1])tag=0;
+		}
+		_ck(tag);
+	}
     return 0;
 }
+
+

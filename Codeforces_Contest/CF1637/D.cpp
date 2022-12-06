@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,22 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,a[N],b[N],ans,sum,f[N];
 
 signed main(){
-    
+    T=read();
+    while(T--){
+        n=read(),ans=0,sum=0;
+        for(int i=1;i<=n;i++)a[i]=read(),ans+=(n-2)*a[i]*a[i],sum+=a[i];
+        for(int i=1;i<=n;i++)b[i]=read(),ans+=(n-2)*b[i]*b[i],sum+=b[i];
+        f[0]=1;
+        for(int i=1;i<=n;i++){
+            for(int j=sum;j>=0;j--)if(f[j])f[j+a[i]]=f[j+b[i]]=1,f[j]=0;
+        }
+        int t=INF;
+        for(int i=0;i<=sum;i++)if(f[i])f[i]=0,t=min(t,i*i+(sum-i)*(sum-i));
+        ans+=t;
+        _write(ans);
+    }
     return 0;
 }

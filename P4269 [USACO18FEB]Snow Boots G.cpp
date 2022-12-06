@@ -27,9 +27,9 @@
 #define pb push_back
 #define ll long long
 // #define int long long
-// #define M ((L+R)/2)
-// #define Lid (id<<1)
-// #define Rid (Lid|1)
+#define M ((L+R)/2)
+#define Lid (id<<1)
+#define Rid (Lid|1)
 // #define Lid ch[id][0]
 // #define Rid ch[id][1]
 
@@ -62,9 +62,59 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int n,q,f[N],ans[N];
 
+struct node{
+    int x,y,z;
+    node(int x=0,int y=0,int z=0):x(x),y(y),z(z){}
+    bool operator < (const node& _)const{
+        return x<_.x;
+    }
+}a[N],b[N];
+
+struct nd{
+    int lmx,rmx,sum,mx;
+    nd(int lmx=0,int rmx=0,int sum=0,int mx=0):lmx(lmx),rmx(rmx),sum(sum),mx(mx){}
+}t[N*4];
+
+void build(int L,int R,int id){
+    t[id]=nd(0,0,R-L+1,0);
+    if(L!=R)build(L,M,Lid),build(M+1,R,Rid);
+    return;
+}
+
+nd merge(nd l,nd r){
+    nd res=nd(l.lmx,r.rmx,l.sum+r.sum,max(l.mx,r.mx));
+    if(l.lmx==l.sum)res.lmx=l.lmx+r.lmx;
+    if(r.rmx==r.sum)res.rmx=r.rmx+l.rmx;
+    _max(res.mx,l.rmx+r.lmx);
+    return res;
+}
+
+void update(int L,int R,int id,int x){
+    if(L==R)t[id]=nd(1,1,R-L+1,1);
+    else{
+        if(x<=M)update(L,M,Lid,x);
+        else update(M+1,R,Rid,x);
+        t[id]=merge(t[Lid],t[Rid]);
+    }
+    return;
+}
 
 signed main(){
-    
+    n=read(),q=read();
+    for(int i=1;i<=n;i++)f[i]=read(),a[i]=node(f[i],i,0);
+    for(int i=1,s,d;i<=q;i++)s=read(),d=read(),b[i]=node(s,d,i);
+    sort(a+1,a+n+1);
+    sort(b+1,b+q+1);
+    build(1,n,1);
+    for(int i=q,j=n;i>=1;i--){
+        while(j>=1&&a[j].x>b[i].x){
+            update(1,n,1,a[j].y);
+            --j;
+        }
+        ans[b[i].z]=(b[i].y>t[1].mx?1:0);
+    }
+    for(int i=1;i<=q;i++)_write(ans[i]);
     return 0;
 }

@@ -26,7 +26,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -60,11 +60,35 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
-const int N=1000007;
+const int N=2048;
 
+int n,f[N][N],vis[N],sz[N];
+vector<int> ch[N];
 
+struct node{
+	int x,y;
+	node(int x=0,int y=0):x(x),y(y){}
+	bool operator < (const node& _)const{return _.y<y;}
+}a[N],b[N];
 
 signed main(){
-    
+	n=read();
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=i;j++)f[i][j]=f[j][i]=read();
+		a[i]=node(i,f[i][i]);
+	}
+	sort(a+1,a+n+1);
+	for(int i=1,x;i<=n;i++){
+        x=a[i].x;
+		vis[x]=1;
+        sz[x]=1;
+        for(unsigned j=0;j<ch[x].size();j++)sz[x]+=sz[ch[x][j]];
+		for(int j=1;j<=n;j++)b[j]=node(j,f[x][j]);
+        sort(b+1,b+n+1);
+        int p=1;
+        while(p<=n&&vis[b[p].x])++p;
+        if(p<=n)printf("%lld %lld %lld\n",b[p].x,x,(f[x][x]-f[x][b[p].x])/(n-sz[x])),ch[b[p].x].pb(x);
+	}
     return 0;
 }
+

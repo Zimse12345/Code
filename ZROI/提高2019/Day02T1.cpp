@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,34 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int n,m,pos[N];
+char s[N],t[N];
 
 signed main(){
-    
+    n=read(),m=read();
+    scanf("%s %s",s+1,t+1);
+    for(int i=1,j=1;i<=m;i++){
+        while(s[j]!=t[i]&&j<n)++j;
+        if(s[j]==t[i])pos[i]=j,++j;
+        else{
+            _write(-1);
+            return 0;
+        }
+    }
+    for(int i=n-1,j=m;i>=1;i--){
+        if(s[i]!=s[i+1]){
+            while(pos[j]>i+1)--j;
+            if(!j){
+                _write(-1);
+                return 0;
+            }
+            if(pos[j]<i){
+                if(s[pos[j]]==s[i])pos[j]=i;
+                else pos[j]=i+1;
+            }
+        }
+    }
+    for(int i=1;i<=m;i++)write_(pos[i]);
+    pc(10);
     return 0;
 }

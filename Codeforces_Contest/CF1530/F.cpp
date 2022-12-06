@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -36,7 +36,7 @@
 using namespace std;
 
 namespace Zimse{
-const int Mod=998244353;
+const int Mod=31607;
 // const int Mod=1000000007;
 
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
@@ -60,11 +60,42 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
-const int N=1000007;
+const int N=32;
 
+int n,m,a[N][N],f[8500000],popc[8500000],p2[8500000],Mul[8500000],_lg[8500000];
 
+inline int lowbit(int x){
+    return x&(-x);
+}
 
 signed main(){
-    
+	n=read(),m=(1<<n);
+	for(int i=0;i<n;i++)for(int j=0;j<n;j++)a[i][j]=read()*inv(10000)%Mod;
+    for(int i=0;i<n;i++)_lg[1<<i]=i;
+    p2[0]=f[0]=1;
+    for(int z=1;z<(1<<(n+2));z++)popc[z]=popc[z^lowbit(z)]+1,p2[z]=p2[z-1]*2,f[z]=1;
+    for(int i=0;i<n;i++){
+        Mul[0]=1;
+        for(int z=1;z<(1<<n);z++)Mul[z]=(Mul[z^(lowbit(z))]*a[i][_lg[lowbit(z)]])%Mod;
+        for(int z=0;z<(1<<(n+2));z++){
+            int _z=(z&(m-1));
+            if(z&p2[n])_z|=p2[i];
+            if(z&p2[n+1])_z|=p2[n-i-1];
+            (f[z]*=Mul[_z])%=Mod;
+            _z^=(m-1);
+            (f[z]*=(1-Mul[_z]))%=Mod;
+        }
+    }
+    int ans=0;
+    for(int z=0;z<(1<<(n+2));z++){
+        int val=1;
+        if(popc[z]&1)val=-1;
+        addmod(ans,f[z]*val);
+    }
+    ans=1-ans;
+    addmod(ans,Mod);
+    _write(ans);
     return 0;
 }
+
+

@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -27,7 +27,7 @@
 #define pb push_back
 #define ll long long
 // #define int long long
-// #define M ((L+R)/2)
+ #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
 // #define Lid ch[id][0]
@@ -62,9 +62,31 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,n,a[N],b[N];
 
+bool ck(int x){
+	int p=1;
+	for(int i=1;i<=x;i++){
+		while(p<=n&&(b[p]<i-1||a[p]<x-i))++p;
+		if(p>n||(b[p]<i-1||a[p]<x-i))return false;
+		++p;
+	} 
+	return true;
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read(),b[i]=read();
+		int L=1,R=n,ans=1;
+		while(L<=R){
+			if(ck(M))ans=M,L=M+1;
+			else R=M-1;
+		}
+		_write(ans);
+	}
     return 0;
 }
+
+

@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -56,15 +56,50 @@ inline int _gcd(int x,int y){return y?_gcd(y,x%y):x;}
 inline int _abs(int x){return x<0?-x:x;}
 inline void _max(int& x,int y){if(x<y)x=y;return;}
 inline void _min(int& x,int y){if(y<x)x=y;return;}
-inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
+inline void addmod(int& x,int y){x+=y;
+if(x>=Mod)x-=Mod;
+return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
 const int N=1000007;
 
-
+int n,a[N],x,y,mx,f[N],g[N];
 
 signed main(){
-    
+    n=read();
+    for(int i=1;i<=n;i++){
+        a[i]=read();
+        if(a[i]==1)++x;
+        else ++y;
+    }
+    if(!x||!y){
+        _write(1);
+        return 0;
+    }
+    mx=max(1,x-y);
+    if(mx==1){
+        for(int i=0;i<=y;i++)f[i]=i+1;
+        for(int i=1;i<x;i++){
+            for(int j=1,s=f[0];j<=y;j++){
+                int _s=f[j];
+                f[j]=s,addmod(s,_s);
+            }
+            f[0]=0;
+        }
+        _write(f[y]);
+    }
+    else{
+        f[0]=1;
+        for(int i=1;i<=x;i++){
+            for(int j=0,s=0;j<=y;j++){
+                if(j>i)break;
+                addmod(s,f[j]);
+                f[j]=s;
+                if(i-j+(i==x?0:1)>mx)f[j]=0;
+            }
+        }
+        _write(f[y]);
+    }
     return 0;
 }

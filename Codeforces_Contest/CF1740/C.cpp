@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,20 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,a[N],ans;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read();
+		sort(a+1,a+n+1);
+		ans=a[n]-a[1];
+		for(int i=n;i>2;i--)_max(ans,a[i]-a[i-1]+a[i]-a[1]);
+		for(int i=1;i<n-1;i++)_max(ans,a[i+1]-a[i]+a[n]-a[i]);
+		_write(ans);
+	}
     return 0;
 }
+
+

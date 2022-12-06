@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,50 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int n,m,q,sum[N],_sum[N],val[N],hs,_hs;
+vector<int> inedge[N];
 
+inline int Rand(){
+    int x=rand()%16384;
+    int y=rand()%16384;
+    return x*16384+y;
+}
 
 signed main(){
-    
+    n=read(),m=read();
+    srand(time(0));
+    for(int i=1;i<=n;i++)val[i]=Rand();
+    for(int i=1,u,v;i<=m;i++){
+        u=read(),v=read();
+        inedge[v].pb(u);
+        addmod(sum[v],val[u]);
+    }
+    for(int i=1;i<=n;i++)addmod(hs,val[i]),addmod(_hs,sum[i]),_sum[i]=sum[i];
+    q=read();
+    while(q--){
+        int op=read();
+        if(op==1){
+            int x=read(),y=read();
+            addmod(_hs,Mod-val[x]);
+            addmod(_sum[y],Mod-val[x]);
+        }
+        if(op==2){
+            int x=read();
+            addmod(_hs,Mod-_sum[x]);
+            _sum[x]=0;
+        }
+        if(op==3){
+            int x=read(),y=read();
+            addmod(_hs,val[x]);
+            addmod(_sum[y],val[x]);
+        }
+        if(op==4){
+            int x=read();
+            addmod(_hs,sum[x]-_sum[x]);
+            _sum[x]=sum[x];
+        }
+        if(hs==_hs)printf("YES\n");
+        else printf("NO\n");
+    }
     return 0;
 }

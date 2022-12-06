@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,34 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,a[N],from[N],to[N],ans;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),ans=0;
+		for(int i=1;i<=n;i++){
+			a[i]=read();
+			if(!from[a[i]])from[a[i]]=i,to[i]=a[i],++ans; 
+		}
+		int x=0,y=0;
+		for(int i=1,j=0;i<=n;i++){
+			if(!from[i]){
+				j=i;
+				while(to[j])j=to[j];
+				if(!x)x=i,y=j;
+				else to[y]=i,from[i]=y,y=j;
+			}
+		}
+		if(x){
+			if(x!=y)from[x]=y,to[y]=x;
+			else to[x]=a[x],to[from[a[x]]]=x;
+		}
+		_write(ans);
+		for(int i=1;i<=n;i++)write_(to[i]),from[i]=to[i]=0;
+		pc(10);
+	}
     return 0;
 }
+
+

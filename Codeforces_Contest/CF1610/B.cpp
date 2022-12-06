@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,33 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,n,a[N];
 
+bool ck(int x){
+	int L=1,R=n;
+	while(L<=R){
+		if(a[L]==x)++L;
+		else if(a[R]==x)--R;
+		else if(a[L]==a[R])++L,--R;
+		else break;
+	}
+	return !(L<=R);
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read();
+		int L=1,R=n;
+		while(L<=R&&a[L]==a[R])++L,--R;
+		if(L<=R&&a[L]!=a[R]){
+			if(ck(a[L])||ck(a[R]))yes;
+			else no;
+		}
+		else yes;
+	}
     return 0;
 }
+
+

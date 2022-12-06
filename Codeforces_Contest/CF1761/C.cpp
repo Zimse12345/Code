@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -60,11 +60,46 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 const int INF=1000114514;
 }using namespace Zimse;
 
-const int N=1000007;
+const int N=128;
 
-
+int T,n,indeg[N];
+char s[N][N];
+int ans[N][N];
+queue<int> q;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++){
+			scanf("%s",s[i]+1);
+			for(int j=1;j<=n;j++)if(s[i][j]=='1')indeg[j]++;
+		}
+		for(int i=1;i<=n;i++)if(!indeg[i])q.push(i);
+		while(!q.empty()){
+			int x=q.front();
+			q.pop();
+			for(int y=1;y<=n;y++)if(s[x][y]=='1'){
+				--indeg[y];
+				if(!indeg[y])q.push(y);
+			}
+			for(int y=1;y<=n;y++)if(s[y][x]=='1'){
+				for(int t=1;t<=n;t++)ans[x][t]|=ans[y][t];
+			}
+			ans[x][x]|=1;
+		}
+		for(int i=1;i<=n;i++){
+			int cnt=0;
+			for(int j=1;j<=n;j++)if(ans[i][j])++cnt;
+			printf("%d ",cnt);
+			for(int j=1;j<=n;j++)if(ans[i][j]){
+				ans[i][j]=0;
+				printf("%d ",j);
+			}
+			printf("\n");
+		}
+	}
     return 0;
 }
+
+

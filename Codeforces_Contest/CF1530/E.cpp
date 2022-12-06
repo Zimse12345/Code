@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,66 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,n,t[N],ans[N],p;
+char s[N];
 
+void add(int c){
+	ans[++p]=c,--t[c];
+	return;
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		scanf("%s",s+1);
+		n=strlen(s+1);
+		for(int i=1;i<=n;i++)++t[s[i]-'a'];
+		p=0;
+		for(int i=0;i<26;i++)if(t[i]==1){
+			add(i);
+			for(int j=0;j<26;j++)while(t[j])add(j);
+			break;
+		}
+		if(!p){
+			for(int i=0;i<26;i++)if(t[i]){
+				add(i);
+				for(int j=0;j<i;j++)while(t[j])add(j);
+				if(p!=1){
+					for(int j=i;j<26;j++)while(t[j])add(j);
+				}
+				else{
+					if(n-p-t[i]>=t[i]-1){
+						add(i);
+						for(int j=i+1;j<26;j++)while(t[j]){
+							add(j);
+							if(t[i])add(i);
+						}
+						break;
+					}
+					int x=0,y=0;
+					for(int j=i+1;j<26;j++)if(t[j]){
+						if(!x)x=j;
+						else if(!y)y=j;
+					}
+					if(x&&y){
+						add(x);
+						while(t[i])add(i);
+						add(y);
+						for(int j=i+1;j<26;j++)while(t[j])add(j);
+					}
+					else{
+						while(t[x])add(x);
+						while(t[i])add(i);
+					}
+				}
+				break;
+			}
+		}
+		for(int i=1;i<=n;i++)pc(ans[i]+'a');
+		pc(10);
+		for(int i=0;i<26;i++)t[i]=0;
+	}
     return 0;
 }
+
+

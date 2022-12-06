@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-10-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,38 @@ const int INF=1000114514;
 
 const int N=1000007;
 
-
+int T,n,ansl[N],ansr[N],ans;
+char a[N],b[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		scanf("%s %s",a+1,b+1);
+		int t0=0,t1=0;
+		for(int i=1;i<=n;i++){
+			if(a[i]==b[i])t0=1;
+			else t1=1;
+		}
+		if(t0&&t1){
+			no;
+			continue;
+		}
+		for(int i=1;i<=n;i++){
+			if(a[i]=='1')++ans,ansl[ans]=i,ansr[ans]=i;
+		}
+		if((t0&&ans%2==1)||(t1&&ans%2==0)){
+			++ans,ansl[ans]=1,ansr[ans]=2;
+			++ans,ansl[ans]=1,ansr[ans]=1;
+			++ans,ansl[ans]=2,ansr[ans]=2;
+		}
+		yes;
+		_write(ans);
+		for(int i=1;i<=ans;i++)write_(ansl[i]),_write(ansr[i]);
+		pc(10);
+		ans=0;
+	}
     return 0;
 }
+
+

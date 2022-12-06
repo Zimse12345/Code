@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -62,9 +62,33 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,n,k,f[N],mx[N];
 
+struct node{
+    int a,b;
+    node(int a=0,int b=0):a(a),b(b){}
+    bool operator < (const node& _)const{
+        if(a==_.a)return b<_.b;
+        return a<_.a;
+    }
+}p[N];
 
 signed main(){
-    
+    T=read();
+    while(T--){
+        n=read(),k=read();
+        for(int i=1,a,b;i<=n;i++){
+            a=read(),b=read();
+            p[i]=node(a,b);
+        }
+        sort(p+2,p+n+1);
+        f[1]=-INF;
+        for(int i=2;i<=n;i++){
+            mx[i]=max(mx[i-1],p[i].a+p[i].b);
+            f[i]=max(max(f[i-1],p[i].a),max(mx[i-1],min(p[i].a,f[i-1])+p[i].b));
+        }
+        if(n==1)_ck(p[1].a>=k);
+        else _ck(max(p[1].a,p[1].b+min(p[1].a,f[n]))>=k);
+    }
     return 0;
 }

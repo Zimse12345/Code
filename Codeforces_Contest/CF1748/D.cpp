@@ -1,7 +1,7 @@
 /********************************
 *FileName:
 *Author: Zimse
-*Data: 2022-12-
+*Data: 2022-11-
 *Description:
 *Other:
 ********************************/
@@ -26,7 +26,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -62,9 +62,30 @@ const int INF=1000114514;
 
 const int N=1000007;
 
+int T,a,b,d;
 
+int lowbit(int x){
+    return x&(-x);
+}
 
 signed main(){
-    
+    T=read();
+    while(T--){
+        a=read(),b=read(),d=read();
+        int t=1,x=0;
+        while(d%2==0){
+            if((a&1)||(b&1))break;
+            d/=2,a/=2,b/=2,t*=2;
+        }
+        if(d%2==0){
+            _write(-1);
+            continue;
+        }
+        x=a|b;
+        int y=(d-x%d)%d;
+        while(x&y)y+=d*lowbit(y);
+        x|=y;
+        _write(x*t);
+    }
     return 0;
 }
