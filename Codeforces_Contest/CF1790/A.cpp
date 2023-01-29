@@ -58,9 +58,19 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T;
+char s[N]; 
 
 signed main(){
-    
+	T=read();
+	string str="314159265358979323846264338327--";
+	while(T--){
+		scanf("%s",s+1);
+		int p=0;
+		while(str[p]==s[p+1])++p;
+		_write(p);
+	}
     return 0;
 }
+
+

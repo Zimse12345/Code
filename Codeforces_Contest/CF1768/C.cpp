@@ -58,9 +58,65 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,n,p[N],q[N],b[N],top,A[N],cnt[N];
+vector<int> a[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1,x;i<=n;i++){
+			x=read();
+			A[i]=x;
+			a[x].pb(i);
+		}
+		int tag=1;
+		top=0;
+		for(int i=n;i>=1;i--){
+			if(a[i].size()>2){
+				tag=0;
+				break;
+			}
+			if(a[i].size()==2){
+				p[a[i][0]]=q[a[i][1]]=i;
+				b[++top]=a[i][0],b[++top]=a[i][1];
+			}
+			if(a[i].size()==1){
+				p[a[i][0]]=q[a[i][0]]=i;
+			}
+			if(a[i].size()==0){
+				if(!top){
+					tag=0;
+					break;
+				}
+				int pos=b[top];
+				if(!p[pos])p[pos]=q[b[top-1]]=i;
+				else q[pos]=p[b[top-1]]=i;
+				top-=2;
+			}
+		}
+		for(int i=1;i<=n;i++)if(max(p[i],q[i])!=A[i])tag=0;
+		for(int i=1;i<=n;i++)++cnt[p[i]];
+		for(int i=1;i<=n;i++){
+			if(cnt[i]!=1)tag=0;
+			cnt[i]=0;
+		}
+		for(int i=1;i<=n;i++)++cnt[q[i]];
+		for(int i=1;i<=n;i++){
+			if(cnt[i]!=1)tag=0;
+			cnt[i]=0;
+		}
+		if(!tag)no;
+		else{
+			yes;
+			for(int i=1;i<=n;i++)write_(p[i]);
+			pc(10);
+			for(int i=1;i<=n;i++)write_(q[i]);
+			pc(10);
+		}
+		for(int i=1;i<=n;i++)p[i]=q[i]=0,a[i].resize(0);
+	}
     return 0;
 }
+
+

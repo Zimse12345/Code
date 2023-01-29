@@ -56,11 +56,58 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=1200007;
 
-
+int T,n,a,f[32][N];
+char s1[N],s2[N];
 
 signed main(){
-    
+    T=read(),n=read();
+    f[0][0]=1;
+    // for(int i=1;i<=n;i++){
+    //     int y=(1<<i)-1;
+    //     for(int j=1;j<=n;j++){
+    //         printf("(%d) ",y);
+    //         if(y&(1<<(n-1)))y=(y-(1<<(n-1)))*2+1;
+    //         else y*=2;
+    //     }
+    //     pc(10);
+    // }
+    for(int i=1;i<=n;i++){
+        for(int x=0;x<(1<<n);x++)if(f[i-1][x]){
+            int y=(1<<i)-1;
+            for(int j=1;j<=n;j++){
+                f[i][x^y]|=1;
+                if(y&(1<<(n-1)))y=(y-(1<<(n-1)))*2+1;
+                else y*=2;
+            }
+        }
+    }
+    // for(int i=0;i<=n;i++){
+    //     for(int j=0;j<(1<<n);j++)pc(f[i][j]+'0');
+    //     pc(10);
+    // }
+    while(T--){
+        scanf("%s %s",s1+1,s2+1);
+        a=0;
+        int tag=1;
+        for(int i=1;i<=n;i++){
+            if((s1[i]-'0')^(s2[i]-'0'))a|=(1<<(i-1));
+            if(s1[i]=='1')tag=0;
+        }
+        if(tag){
+            printf("0\n");
+            continue;
+        }
+        int ans=1;
+        while(!f[ans][a]){
+            ++ans;
+            int tt=s2[n];
+            for(int i=n;i>=2;i--)s2[i]=s2[i-1];
+            s2[1]=tt;
+            for(int i=1;i<=n;i++)if(s2[i]=='1')a^=(1<<(i-1));
+        }
+        _write(ans);
+    }
     return 0;
 }

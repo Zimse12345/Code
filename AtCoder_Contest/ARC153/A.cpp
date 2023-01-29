@@ -58,9 +58,18 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int n;
+int num[6];
 
 signed main(){
-    
+	n=read()-1;
+	int c=5;
+	while(n){
+		num[c]=n%10;
+		n/=10,--c;
+	}
+	printf("%d%d%d%d%d%d%d%d%d\n",num[0]+1,num[0]+1,num[1],num[2],num[3],num[3],num[4],num[5],num[4]);
     return 0;
 }
+
+

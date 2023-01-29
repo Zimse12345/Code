@@ -58,9 +58,66 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
+int T,n,u[N],v[N],from[N],to[N],del[N];
 
+struct node{
+	int l,r,ty,id;
+	node(int l=0,int r=0,int ty=0,int id=0):l(l),r(r),ty(ty),id(id){}
+	bool operator < (const node& _)const{return r<_.r;}
+};
+
+node a[N];
+int tot,stk[N],top;
+
+int sol(int tag){
+	int res=0;
+	tot=0;
+	for(int i=1;i<=n;i++)if(del[i]==0){
+		if(tag==1&&u[i]==1)a[++tot]=node(from[i],to[i],v[i],i);
+		if(tag==2&&v[i]==2)a[++tot]=node(from[i],to[i],u[i]^3,i);
+	}
+	sort(a+1,a+tot+1);
+	top=0;
+	for(int i=1;i<=tot;i++){
+		int l=a[i].l;
+		while(top&&l<=from[stk[top]]){
+			if(u[stk[top]]!=v[stk[top]]){
+				if(tag==1)++u[stk[top]];
+				else --v[stk[top]];
+			}
+			else del[stk[top]]=1;
+			--top;
+		}
+		if(top&&u[stk[top]]==v[stk[top]]&&a[i].ty==2){
+			_min(to[stk[top]],l-1);
+		}
+		if(top)_max(from[a[i].id],to[stk[top]]+1);
+		stk[++top]=a[i].id;
+	}
+	return res;
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++){
+			del[i]=0;
+			u[i]=read(),from[i]=read(),v[i]=read(),to[i]=read();
+		}
+		sol(1);
+		sol(2);
+		int ans=0;
+		for(int i=1;i<=n;i++){
+			if(del[i])u[i]=from[i]=v[i]=to[i]=0;
+			else ans+=(v[i]-u[i]+1)*(to[i]-from[i]+1);
+		}
+		_write(ans);
+		for(int i=1;i<=n;i++){
+			printf("%d %d %d %d\n",u[i],from[i],v[i],to[i]);
+		}
+	}
     return 0;
 }
+
+

@@ -56,11 +56,32 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=1007;
 
-
+int T,a[N][N],n,t[N],p[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++){
+			p[i]=1;
+			for(int j=1;j<n;j++)a[i][j]=read();
+			a[i][n]=0;
+		}
+		for(int i=1;i<=n;i++){
+			for(int j=1;j<=n;j++)++t[a[j][p[j]]];
+			int ans=-1;
+			for(int j=1;j<=n;j++)if(t[j]==n-1)ans=j;
+			write_(ans);
+			for(int j=1;j<=n;j++){
+				if(a[j][p[j]]==ans)++p[j];
+				t[j]=0;
+			}
+		}
+		pc(10);
+	}
     return 0;
 }
+
+

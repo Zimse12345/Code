@@ -58,9 +58,28 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,n,a[N];
+vector<int> x,y;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++){
+			a[i]=read();
+			if(a[i]&1)x.pb(i);
+			else y.pb(i);
+		}
+		if(x.size()>=3){
+			printf("YES\n%d %d %d\n",x[0],x[1],x[2]);
+		}
+		else if(x.size()>=1&&y.size()>=2){
+			printf("YES\n%d %d %d\n",x[0],y[0],y[1]);
+		}
+		else no;
+		x.resize(0),y.resize(0);
+	}
     return 0;
 }
+
+

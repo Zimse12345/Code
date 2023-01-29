@@ -25,16 +25,19 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
 // #define Lid ch[id][0]
 // #define Rid ch[id][1]
 
+int P;
+#define Mod P
+
 namespace Zimse{
 const int INF=1000114514;
-const int Mod=998244353;
+//const int Mod=998244353;
 // const int Mod=1000000007;
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
@@ -56,11 +59,30 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=3000007;
 
+int n,ans,fac[N],ifac[N];
 
+int C(int x,int y){
+	return fac[x]*ifac[y]%P*ifac[x-y]%P;
+}
 
 signed main(){
-    
+	n=read(),Mod=read();
+	fac[0]=ifac[0]=1;
+	for(int i=1;i<=n*3;i++)fac[i]=fac[i-1]*i%Mod,ifac[i]=inv(fac[i]);
+	ans=fac[n*3]*3%P;
+	int x=0;
+	x=C(2*n,n)*fac[n]%P*fac[2*n]%P*2%P;
+	for(int i=0;i<=n;i++){
+		addmod(x,-C(n,i)*C(n,n-i)%P*C(2*n-i,n)%P*fac[n]%P*fac[n]%P*fac[n]%P);
+	}
+	addmod(ans,-x);
+	addmod(ans,-fac[n*2]*2);
+	if(n!=1)addmod(ans,fac[n]-1);
+	addmod(ans,Mod);
+	_write(ans);
     return 0;
 }
+
+

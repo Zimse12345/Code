@@ -58,9 +58,28 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,w;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		w=read();
+		int ww=w;
+		int p=0,ans=0,u1=0;
+		while(w){
+			printf("- %d\n",1+p);
+			fflush(stdout);
+			int _w=read();
+			int t1=_w-(w-u1)+1;
+			ans|=(1<<t1),u1=t1;
+			p=((1<<t1)-1);
+			w=_w;
+			--ww;
+			if(!ww)break;
+		}
+		printf("! %d\n",ans);
+		fflush(stdout);
+	}
     return 0;
 }
+

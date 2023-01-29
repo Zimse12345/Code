@@ -58,9 +58,35 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int n,m,q,a[N],b[N];
+vector<char> str[N];
+char s[N]; 
 
 signed main(){
-    
+	n=read(),m=read();
+	for(int i=1;i<=n;i++){
+		scanf("%s",s+1);
+		str[i].resize(m+1);
+		for(int j=1;j<=m;j++)str[i][j]=s[j];
+	}
+	q=read();
+	for(int i=1;i<=q;i++)a[i]=read(),b[i]=read();
+	int w=1,s=1,_s=1;
+	for(int i=1;i<=q;i++){
+		s=(s+(a[i]-1)*w+n)%n;
+		_s=(_s+(b[i]-1)*w+m)%m;
+		w=-w;
+	}
+	for(int i=1,x=s;i<=n;i++,x+=w){
+		for(int j=1,y=_s;j<=m;j++,y+=w){
+			x%=n,y%=m;
+			if(!x)x=n;
+			if(!y)y=m;
+			pc(str[x][y]);
+		}
+		pc(10);
+	}
     return 0;
 }
+
+

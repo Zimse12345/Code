@@ -25,7 +25,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -56,11 +56,42 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=4000007;
 
-
+int T,n,a[N],b[N],tot;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read();
+		sort(a+1,a+n+1);
+		int ans=1;
+		for(int i=1;i<=n;i++){
+			tot=0;
+			for(int j=i;j<=n;j++)if(j!=i){
+				for(int x=1;x*x<=a[j]-a[i];x++)if((a[j]-a[i])%x==0){
+					int y=_abs(a[j]-a[i])/x;
+					if((x+y)&1)continue;
+					int u=(x+y)/2;
+					int val=u*u-a[max(i,j)];
+					if(val<0||u<0)continue;
+					int v=u-x;
+					if(v*v-a[min(i,j)]<0||v<0)continue;
+					b[++tot]=val;
+				}
+			}
+			sort(b+1,b+tot+1);
+			b[0]=-1;
+			for(int i=1,s=0;i<=tot;i++){
+				if(b[i]!=b[i-1])s=1;
+				else ++s;
+				_max(ans,s+1);
+			}
+		}
+		_write(ans);
+	}
     return 0;
 }
+
+

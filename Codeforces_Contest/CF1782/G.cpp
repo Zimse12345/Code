@@ -58,9 +58,67 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
+int T,n,fa[N],lc[N],rc[N],tag[N],rev[N],ans[N];
 
+void dfs(int u){
+    if(!u)return;
+    dfs(lc[u]),dfs(rc[u]);
+    if(rc[u]){
+        if(tag[rc[u]]<tag[lc[u]])swap(lc[u],rc[u]);
+        if(tag[lc[u]]==1){
+            if(tag[rc[u]]==1&&(lc[lc[u]]||lc[rc[u]])){
+                tag[u]=1;
+                if(lc[lc[u]])rev[rc[u]]^=1;
+                else rev[lc[u]]^=1;
+            }
+            else{
+                tag[u]=4-tag[rc[u]];
+                rev[lc[u]]^=1,rev[rc[u]]^=1;
+            }
+        }
+        else if(tag[lc[u]]==2){
+            if(tag[rc[u]]==2)tag[u]=1,rev[lc[u]]^=1,rev[rc[u]]^=1;
+            else tag[u]=2,rev[lc[u]]^=1;
+        }
+        else tag[u]=1,rev[lc[u]]^=1;
+    }
+    else if(lc[u]){
+        if(tag[lc[u]]==1)tag[u]=2,rev[lc[u]]^=1;
+        else if(tag[lc[u]]==2)tag[u]=1,rev[lc[u]]^=1;
+        else{
+            if(u==1)rev[lc[u]]^=1;
+            else tag[u]=2;
+        }
+    }
+    else tag[u]=1;
+    return;
+}
+
+void dfs2(int u,int pre){
+    pre^=rev[u];
+    ans[u]=pre;
+    if(lc[u])dfs2(lc[u],pre);
+    if(rc[u])dfs2(rc[u],pre);
+    return;
+}
 
 signed main(){
-    
+    T=read();
+    while(T--){
+        n=read();
+        lc[1]=rc[1]=rev[1]=0;
+        for(int i=2;i<=n;i++){
+            lc[i]=rc[i]=rev[i]=0;
+            fa[i]=read();
+            if(!lc[fa[i]])lc[fa[i]]=i;
+            else rc[fa[i]]=i;
+            if(i==4&&fa[3]==2&&fa[4]==2)_write(2);
+            else _write(i&1);
+        }
+        dfs(1);
+        dfs2(1,0);
+        for(int i=1;i<=n;i++)pc(ans[i]?'w':'b');
+        pc(10);
+    }
     return 0;
 }

@@ -58,9 +58,50 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
+int T,n,m,p[1000000][16],ch[1000000][16],tot,mx[1000000],ans[1000000];
+vector<int> v[1000000];
 
+void dfs(int u,int a){
+	_max(a,mx[u]);
+	for(int i=1;i<=m;i++)if(ch[u][i])dfs(ch[u][i],a);
+	for(unsigned i=0;i<v[u].size();i++)ans[v[u][i]]=a;
+	return;
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),m=read();
+		for(int i=1;i<=n;i++){
+			int s=0;
+			for(int j=1;j<=m;j++){
+				p[i][j]=read();
+				if(!ch[s][p[i][j]])ch[s][p[i][j]]=++tot;
+				s=ch[s][p[i][j]];
+			}
+			v[s].pb(i);
+		}
+		for(int i=1;i<=n;i++){
+			int s=0;
+			for(int j=1;j<=m;j++){
+				int val=0;
+				for(int jj=1;jj<=m;jj++)if(p[i][jj]==j)val=jj;
+				s=ch[s][val];
+				if(!s)break;
+				_max(mx[s],j);
+			}
+		}
+		dfs(0,0);
+		for(int i=1;i<=n;i++)write_(ans[i]);
+		for(int i=0;i<=tot;i++){
+			for(int j=1;j<=m;j++)ch[i][j]=0;
+			mx[i]=0;
+			v[i].resize(0);
+		}
+		pc(10);
+		tot=0;
+	}
     return 0;
 }
+
+

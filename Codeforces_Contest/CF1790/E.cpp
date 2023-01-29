@@ -58,9 +58,24 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,x;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		x=read();
+		int s=0;
+		for(int i=0;i<30;i++){
+			if(x&(1<<i))s+=(1<<i);
+		}
+		s=x*2-s;
+		if(s%2==0&&((s/2)&x)==0){
+			int A=((s/2)|x),B=A^x;
+			printf("%d %d\n",A,B);
+		}
+		else printf("-1\n");
+	}
     return 0;
 }
+
+

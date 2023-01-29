@@ -25,7 +25,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -56,11 +56,63 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=2000007;
 
+int T,n,m1,m2,a[N],tot,b[N],c[N],_tot,ans[N],p[N],pcnt;
+map<int,int> mp;
 
+void aa(int x){
+	for(int i=2;i*i<=x;i++){
+		while(x%i==0)x/=i,a[++tot]=i;
+	}
+	if(x>1)a[++tot]=x;
+	return;
+}
+
+void dfs(int pos,int val){
+	if(pos>tot){
+		if(val<=n)mp[val]=1;
+		else{
+			int res=INF;
+			for(int i=1;i<=pcnt;i++)_min(res,p[i]*mp[val/p[i]]);
+			mp[val]=res;
+		}
+	}
+	else{
+		for(int i=0;i<=c[pos];i++){
+			if(i==1)p[++pcnt]=b[pos];
+			dfs(pos+1,val);
+			val*=b[pos];
+		}
+		--pcnt;
+	}
+	return;
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),m1=read(),m2=read(),tot=0;
+		aa(m1),aa(m2);
+		sort(a+1,a+tot+1),_tot=tot,tot=0;
+		a[_tot+1]=-1;
+		for(int i=1,v=0,vv=0;i<=_tot+1;i++){
+			if(a[i]!=v){
+				if(vv)b[++tot]=v,c[tot]=vv;
+				v=a[i],vv=1;
+			}
+			else ++vv;
+		}
+		dfs(1,1);
+		int ans1=0,ans2=0;
+		for(map<int,int>::iterator it=mp.begin();it!=mp.end();it++){
+			if((it->second)>n)continue;
+			ans1++,ans2^=(it->second);
+		}
+		mp.clear();
+		printf("%lld %lld\n",ans1,ans2);
+	}
     return 0;
 }
+
+

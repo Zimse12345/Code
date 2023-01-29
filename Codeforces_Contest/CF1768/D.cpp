@@ -25,7 +25,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -58,9 +58,28 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,n,a[N],vis[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read(),vis[i]=0;
+		int ans=INF,cnt=0;
+		for(int i=1;i<=n;i++){
+			int c=0,x=i;
+			while(!vis[x])vis[x]=i,x=a[x],++c;
+			if(c>0)cnt+=c-1;
+		}
+		for(int i=1;i<n;i++){
+			if(vis[i]!=vis[i+1])_min(ans,cnt+1);
+			else{
+				_min(ans,cnt-1);
+			}
+		}
+		_write(ans);
+	}
     return 0;
 }
+
+

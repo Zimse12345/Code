@@ -58,9 +58,23 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,n,a[N],ans;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),ans=0;
+		int c1=0;
+		for(int i=1;i<=n;i++){
+			a[i]=read();
+			if(a[i]==1)++c1;
+			else ++ans;
+		}
+		ans+=c1/2;
+		ans+=(c1&1);
+		_write(ans);
+	}
     return 0;
 }
+
+

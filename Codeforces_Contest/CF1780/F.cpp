@@ -25,7 +25,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -58,9 +58,62 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
+int n,a[N],pr[N],mu[N],prime[N],tot,x[N],y[N],sx[N],sy[N],ans,sum;
 
+void addx(int v,int t){
+	vector<int> s;
+	while(v>1){
+		int k=pr[v];
+		while(pr[v]==k)v/=k;
+		s.pb(k);
+	}
+	int sz=s.size();
+	for(int i=0;i<(1<<sz);i++){
+		int mul=1;
+		for(int j=0;j<sz;j++)if(i&(1<<j))mul*=s[j];
+		sx[mul]+=t;
+		sum+=t*sy[mul]*mu[mul];
+	}
+	return;
+}
+
+void addy(int v,int t){
+	vector<int> s;
+	while(v>1){
+		int k=pr[v];
+		while(pr[v]==k)v/=k;
+		s.pb(k);
+	}
+	int sz=s.size();
+	for(int i=0;i<(1<<sz);i++){
+		int mul=1;
+		for(int j=0;j<sz;j++)if(i&(1<<j))mul*=s[j];
+		sy[mul]+=t;
+		sum+=t*sx[mul]*mu[mul];
+	}
+	return;
+}
 
 signed main(){
-    
+	mu[1]=1;
+	for(int i=2;i<N;i++){
+		if(!pr[i])pr[i]=i,prime[++tot]=i,mu[i]=-1;
+		for(int j=1;j<=tot&&prime[j]*i<N;j++){
+			pr[prime[j]*i]=prime[j],mu[prime[j]*i]=-mu[i];
+			if(pr[i]==prime[j])mu[prime[j]*i]=0;
+		}
+	}
+	n=read();
+	for(int i=1;i<=n;i++)a[i]=read(),++y[a[i]],addy(a[i],1);
+	sort(a+1,a+n+1);
+	--y[a[1]],addy(a[1],-1);
+	for(int i=2;i<n;i++){
+		--y[a[i]],++x[a[i-1]];
+		addy(a[i],-1),addx(a[i-1],1);
+		ans+=sum;
+	}
+	_write(ans);
     return 0;
 }
+
+

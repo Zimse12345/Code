@@ -25,7 +25,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -34,8 +34,8 @@
 
 namespace Zimse{
 const int INF=1000114514;
-const int Mod=998244353;
-// const int Mod=1000000007;
+// const int Mod=998244353;
+const int Mod=1000000007;
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
 inline void write(int x){if(x<0)pc(45),x=-x;if(x>=10)write(x/10);pc(48+x%10);return;}
@@ -58,9 +58,24 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int k,f[32][32][2],ans;
 
 signed main(){
-    
+    k=read();
+    f[31][0][1]=1;
+    for(int i=30;i>=0;i--){
+        for(int j=0;j<32;j++){
+            for(int t=0;t<2;t++)if(f[i+1][j][t]){
+                if(!(t&&(k&(1<<i))==0)){
+                    addmod(f[i][j+1][t],f[i+1][j][t]);
+                    if(j)addmod(f[i][j][t],f[i+1][j][t]*fpow(2,j-1));
+                }
+                if(k&(1<<i))addmod(f[i][j][0],f[i+1][j][t]*fpow(2,max(0ll,j-1)));
+                else addmod(f[i][j][t],f[i+1][j][t]*fpow(2,max(0ll,j-1)));
+            }
+        }
+    }
+    for(int j=0;j<32;j++)addmod(ans,f[0][j][0]+f[0][j][1]);
+    _write(ans);
     return 0;
 }

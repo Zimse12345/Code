@@ -58,9 +58,15 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,k;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		k=read();
+		_write(k-1);
+	}
     return 0;
 }
+
+

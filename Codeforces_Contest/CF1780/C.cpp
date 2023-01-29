@@ -58,9 +58,34 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int T,n,m,a[N],cnt[N],c[N],ans;
+multiset<int> s;
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read(),m=read();
+		for(int i=1;i<=n;i++)a[i]=read(),++cnt[a[i]];
+		for(int i=1;i<=m;i++)c[i]=read();
+		sort(c+1,c+m+1);
+		for(int i=1;i<=n;i++)if(cnt[i])s.insert(cnt[i]),cnt[i]=0;
+		s.insert(INF);
+		s.insert(0);
+		for(int i=m;i>=1;i--){
+			multiset<int>::iterator it=s.lower_bound(c[i]);
+			if(*it==INF)--it;
+			int val=*it;
+			if(val){
+				s.erase(it);
+				ans+=min(val,c[i]);
+				val-=c[i];
+				if(val>0)s.insert(val);
+			}
+		}
+		_write(ans);
+		ans=0,s.clear();
+	}
     return 0;
 }
+
+

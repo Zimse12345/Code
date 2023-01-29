@@ -58,9 +58,50 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
+int T,n,c[N],tag[N],cc[N];
+char str[N],ans[N],s[N];
 
+struct node{
+	int x,y;
+	node(int x=0,int y=0):x(x),y(y){}
+	bool operator < (const node& _)const{return y>_.y;}
+}p[N];
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		int mn=INF;
+		n=read();
+		scanf("%s",str+1);
+		for(int i=1;i<=n;i++)++c[str[i]-'a'];
+		for(int i=0;i<26;i++)p[i]=node(i,c[i]);
+		sort(p,p+26);
+		for(int i=1;i<=26;i++)if(n%i==0){
+			for(int j=0;j<26;j++)tag[j]=0,cc[j]=c[j];
+			for(int j=0;j<i;j++)tag[p[j].x]=n/i;
+			int cost=0;
+			for(int j=1;j<=n;j++){
+				--cc[str[j]-'a'];
+				if(tag[str[j]-'a']>0)ans[j]=str[j];
+				else{
+					for(int t=i-1;t>=0;t--)if(tag[p[t].x]-cc[p[t].x]>0){
+						ans[j]=p[t].x+'a';
+						break;
+					}
+					++cost;
+				}
+				--tag[ans[j]-'a'];
+			}
+			if(cost<mn){
+				mn=cost;
+				for(int j=1;j<=n;j++)s[j]=ans[j];
+			}
+		}
+		_write(mn);
+		for(int i=1;i<=n;i++)pc(s[i]);
+		pc(10);
+		for(int i=0;i<26;i++)c[i]=0;
+	}
     return 0;
 }
+

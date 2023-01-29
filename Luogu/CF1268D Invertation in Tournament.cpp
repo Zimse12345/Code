@@ -56,11 +56,57 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=2048;
 
+int n,ans,deg[N],a[N];
+char str[N][N];
 
+void rev(int x){
+    for(int i=1;i<=n;i++){
+        if(str[i][x]=='1')--deg[i],++deg[x];
+        else ++deg[i],--deg[x];
+        str[i][x]^=1,str[x][i]^=1;
+    }
+    return;
+}
+
+int ck(){
+    for(int i=1;i<=n;i++)a[i]=deg[i];
+    sort(a+1,a+n+1);
+    for(int i=1,sum=0;i<n;i++){
+        sum+=a[i];
+        if(sum==i*(i-1)/2)return 0;
+    }
+    return 1;
+}
 
 signed main(){
-    
+    n=read();
+    for(int i=1;i<=n;i++){
+        scanf("%s",str[i]+1);
+        for(int j=1;j<=n;j++)if(str[i][j]=='1')++deg[i];
+    }
+    if(ck()){
+        printf("0 1\n");
+        return 0;
+    }
+    if(n<=6){
+        int mn=INF;
+        for(int i=0;i<(1<<n);i++){
+            int sz=0,p=1;
+            for(int j=0;j<n;j++)if(i&(1<<j))rev(j+1),p*=++sz;
+            if(ck()){
+                if(sz<mn)mn=sz,ans=0;
+                if(sz==mn)ans+=p;
+            }
+            for(int j=0;j<n;j++)if(i&(1<<j))rev(j+1);
+        }
+        if(!ans)printf("-1\n");
+        else printf("%d %d\n",mn,ans);
+    }
+    else{
+        for(int i=1;i<=n;i++)rev(i),ans+=ck(),rev(i);
+        printf("1 %d\n",ans);
+    }
     return 0;
 }

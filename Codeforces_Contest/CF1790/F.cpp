@@ -58,9 +58,40 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
+int T,n,a[N],hd[N],nxt[N],to[N],ec,dis[N],ans;
 
+inline void add(int u,int v){
+	nxt[++ec]=hd[u],hd[u]=ec,to[ec]=v;
+	return;
+}
+
+void dfs(int u,int d){
+	if(d>=dis[u]||d>=ans)return;
+	dis[u]=d;
+	for(int i=hd[u],v;i;i=nxt[i]){
+		v=to[i],dfs(v,d+1);
+	}
+	return;
+}
 
 signed main(){
-    
+	T=read();
+	while(T--){
+		n=read();
+		for(int i=1;i<=n;i++)a[i]=read(),dis[i]=INF;
+		for(int i=1,u,v;i<n;i++)u=read(),v=read(),add(u,v),add(v,u);
+		ans=INF;
+		dfs(a[1],0);
+		for(int i=2;i<=n;i++){
+			_min(ans,dis[a[i]]);
+			dfs(a[i],0);
+			write_(ans);
+		}
+		pc(10);
+		for(int i=1;i<=n;i++)hd[i]=0;
+		ec=0;
+	}
     return 0;
 }
+
+

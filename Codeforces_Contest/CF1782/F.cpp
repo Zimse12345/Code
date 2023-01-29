@@ -25,7 +25,7 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
@@ -56,11 +56,31 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=1024;
 
-
+int n,p,f[N][N],pre[N][N],C[N][N];
 
 signed main(){
-    
+    C[0][0]=1;
+    for(int i=1;i<N;i++){
+        C[i][0]=1;
+        for(int j=1;j<N;j++)C[i][j]=(C[i-1][j]+C[i-1][j-1])%Mod;
+    }
+    n=read(),p=read()*inv(10000)%Mod;
+    f[0][0]=pre[0][0]=1;
+    for(int i=1;i<=n;i++)pre[0][i]=1;
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<=i;j++){
+            for(int x=1;x<=i;x++){
+                addmod(f[i][j],(f[x-1][j+1]*pre[i-x][j]+pre[x-1][j]*f[i-x][j])%Mod*C[i][x]%Mod*p);
+                if(j)addmod(f[i][j],(pre[x-1][j-1]*f[i-x][j]+f[x-1][j-1]*pre[i-x][j-1])%Mod*C[i][x]%Mod*(Mod+1-p));
+            }
+        }
+        pre[i][0]=f[i][0];
+        for(int j=1;j<=n;j++)pre[i][j]=(pre[i][j-1]+f[i][j])%Mod;
+    }
+    int ans=f[n][0];
+    for(int i=0;i<n;i++)ans=ans*inv(i*2+1)%Mod;
+    _write(ans);
     return 0;
 }
