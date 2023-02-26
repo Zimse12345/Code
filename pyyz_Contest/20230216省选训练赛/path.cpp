@@ -5,38 +5,44 @@
 *Description:
 ************************/
 
-#include <algorithm>
-#include <cctype>
-#include <cmath>
 #include <cstdio>
-#include <cstdlib>
+#include <algorithm>
 #include <cstring>
-#include <ctime>
-#include <iostream>
+#include <vector>
+#include <cmath>
+#include <set>
 #include <map>
 #include <queue>
-#include <set>
 #include <stack>
-#include <vector>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cctype>
 
 #define gc getchar
 #define pc putchar
-#define yes printf("Yes\n")
-#define no printf("No\n")
+#define yes _Yes()
+#define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
+// #define Lid ch[id][0]
+// #define Rid ch[id][1]
+
+int Mod;
 
 namespace Zimse{
 const int INF=1000114514;
-const int Mod=998244353;
+// const int Mod=998244353;
 // const int Mod=1000000007;
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
 inline void write(int x){if(x<0)pc(45),x=-x;if(x>=10)write(x/10);pc(48+x%10);return;}
+inline void _Yes(){pc(89),pc(101),pc(115),pc(10);return;}
+inline void _No(){pc(78),pc(111),pc(10);return;}
 inline void _ck(bool x){x?yes:no;return;}
 inline void write_(int x){write(x),pc(32);return;}
 inline void _write(int x){write(x),pc(10);return;}
@@ -52,11 +58,27 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=2048;
 
-
+int n,f[N],g[N],C[N][N],ans[N],j;
 
 signed main(){
-    
+    n=read(),Mod=read();
+    C[0][0]=1;
+    for(int i=1;i<=n;i++){
+        C[i][0]=1;
+        for(int j=1;j<=n;j++)C[i][j]=(C[i-1][j-1]+C[i-1][j])%Mod;
+    }
+    f[0]=g[0]=1;
+    for(int i=1;i<=n;i++){
+        f[i]=g[i]=fpow(2,i*(i-1)/2);
+        for(int j=1;j<i;j++)addmod(g[i],-g[j]*f[i-j]%Mod*C[i][j]);
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=i;j<=n;j++){
+            addmod(ans[n-i+1],g[j-i+1]*f[i-1]%Mod*f[n-j]%Mod*C[n-1][j-1]%Mod*C[j-1][i-1]);
+        }
+    }
+    for(int i=1;i<=n;i++)addmod(ans[i],Mod),_write(ans[i]);
     return 0;
 }

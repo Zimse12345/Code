@@ -1,34 +1,36 @@
 /************************
 *FileName:
 *Author: Zimse
-*Data: 2023-02-
+*Data: 2023-01-
 *Description:
 ************************/
 
-#include <algorithm>
-#include <cctype>
-#include <cmath>
 #include <cstdio>
-#include <cstdlib>
+#include <algorithm>
 #include <cstring>
-#include <ctime>
-#include <iostream>
+#include <vector>
+#include <cmath>
+#include <set>
 #include <map>
 #include <queue>
-#include <set>
 #include <stack>
-#include <vector>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cctype>
 
 #define gc getchar
 #define pc putchar
-#define yes printf("Yes\n")
-#define no printf("No\n")
+#define yes _Yes()
+#define no _No()
 #define pb push_back
 #define ll long long
 // #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
+// #define Lid ch[id][0]
+// #define Rid ch[id][1]
 
 namespace Zimse{
 const int INF=1000114514;
@@ -37,6 +39,8 @@ const int Mod=998244353;
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
 inline void write(int x){if(x<0)pc(45),x=-x;if(x>=10)write(x/10);pc(48+x%10);return;}
+inline void _Yes(){pc(89),pc(101),pc(115),pc(10);return;}
+inline void _No(){pc(78),pc(111),pc(10);return;}
 inline void _ck(bool x){x?yes:no;return;}
 inline void write_(int x){write(x),pc(32);return;}
 inline void _write(int x){write(x),pc(10);return;}
@@ -54,9 +58,24 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-
+int n,a,b,c,d; 
 
 signed main(){
-    
+	n=read(),a=read(),b=read(),c=read(),d=read();
+	//a xx
+	//b xy
+	//c yx
+	//d yy
+	if(b==0&&c==0){
+		if(a==0||d==0)yes;
+		else no;
+	}
+	else if(b==c)yes;
+	else{
+		if(_abs(b-c)==1)yes;
+		else no;
+	}
     return 0;
 }
+
+

@@ -1,34 +1,36 @@
 /************************
 *FileName:
 *Author: Zimse
-*Data: 2023-02-
+*Data: 2023-01-
 *Description:
 ************************/
 
-#include <algorithm>
-#include <cctype>
-#include <cmath>
 #include <cstdio>
-#include <cstdlib>
+#include <algorithm>
 #include <cstring>
-#include <ctime>
-#include <iostream>
+#include <vector>
+#include <cmath>
+#include <set>
 #include <map>
 #include <queue>
-#include <set>
 #include <stack>
-#include <vector>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cctype>
 
 #define gc getchar
 #define pc putchar
-#define yes printf("Yes\n")
-#define no printf("No\n")
+#define yes _Yes()
+#define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+ #define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
+// #define Lid ch[id][0]
+// #define Rid ch[id][1]
 
 namespace Zimse{
 const int INF=1000114514;
@@ -37,6 +39,8 @@ const int Mod=998244353;
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
 inline void write(int x){if(x<0)pc(45),x=-x;if(x>=10)write(x/10);pc(48+x%10);return;}
+inline void _Yes(){pc(89),pc(101),pc(115),pc(10);return;}
+inline void _No(){pc(78),pc(111),pc(10);return;}
 inline void _ck(bool x){x?yes:no;return;}
 inline void write_(int x){write(x),pc(32);return;}
 inline void _write(int x){write(x),pc(10);return;}
@@ -52,11 +56,34 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=2000007,V=300000;
 
+int n,q,W,tr[N],a[N],ans;
 
+inline void ub(int& x){x+=(x&(-x));return;}
+inline void db(int& x){x-=(x&(-x));return;}
+inline void add(int x,int y){++x;for(;x<N;ub(x))tr[x]+=y;return;}
+inline int sum(int x){++x;if(x<=0)return 0;int res=0;for(;x;db(x))res+=tr[x];return res;}
+
+void Add(int x){
+	add(x,1),ans+=sum(W-x);
+	return;
+}
+
+void Del(int x){
+	ans-=sum(W-x),add(x,-1);
+	return;
+}
 
 signed main(){
-    
+	n=read(),q=read(),W=read();
+	for(int i=1;i<=n;i++)a[i]=read(),Add(a[i]);
+	while(q--){
+		int p=read(),x=read();
+		Del(a[p]),a[p]=x,Add(x);
+		_write(ans);
+	}
     return 0;
 }
+
+

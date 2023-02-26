@@ -5,38 +5,42 @@
 *Description:
 ************************/
 
-#include <algorithm>
-#include <cctype>
-#include <cmath>
 #include <cstdio>
-#include <cstdlib>
+#include <algorithm>
 #include <cstring>
-#include <ctime>
-#include <iostream>
+#include <vector>
+#include <cmath>
+#include <set>
 #include <map>
 #include <queue>
-#include <set>
 #include <stack>
-#include <vector>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cctype>
 
 #define gc getchar
 #define pc putchar
-#define yes printf("Yes\n")
-#define no printf("No\n")
+#define yes _Yes()
+#define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
+//#define int long long
 // #define M ((L+R)/2)
 // #define Lid (id<<1)
 // #define Rid (Lid|1)
+// #define Lid ch[id][0]
+// #define Rid ch[id][1]
 
 namespace Zimse{
 const int INF=1000114514;
-const int Mod=998244353;
-// const int Mod=1000000007;
+// const int Mod=998244353;
+const int Mod=1000000007;
 inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
 {if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
 inline void write(int x){if(x<0)pc(45),x=-x;if(x>=10)write(x/10);pc(48+x%10);return;}
+inline void _Yes(){pc(89),pc(101),pc(115),pc(10);return;}
+inline void _No(){pc(78),pc(111),pc(10);return;}
 inline void _ck(bool x){x?yes:no;return;}
 inline void write_(int x){write(x),pc(32);return;}
 inline void _write(int x){write(x),pc(10);return;}
@@ -52,11 +56,40 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+const int N=4000007;
 
+int n,k,tot;
+int hd[N],nxt[N*2],to[N*2],ec;
+ll seed,val[N],dis[N],ans;
 
+inline void add(int u,int v){
+	nxt[++ec]=hd[u],hd[u]=ec,to[ec]=v;
+	return;
+}
 
 signed main(){
-    
+    n=read(),k=read(),seed=read();
+    val[1]=seed;
+    for(int i=2;i<=n;i++){
+        val[i]=(val[i-1]*23333333ll+6666666ll)%Mod;
+        int fa=(val[i]^23333333ll)%(i-1)+1;
+        add(fa,i);
+    }
+    for(int u=n;u>=1;u--){
+    	ll t=0;
+    	for(int i=hd[u],v;i;i=nxt[i]){
+    		v=to[i];
+    		if(val[v]>t){
+    			if(t)dis[++tot]=t;
+    			t=val[v];
+			}
+			else dis[++tot]=val[v];
+		}
+		val[u]+=t;
+	}
+	dis[++tot]=val[1];
+    sort(dis+1,dis+tot+1);
+    for(int i=tot;i>=max(1,tot-k+1);i--)ans+=dis[i];
+    printf("%lld\n",ans);
     return 0;
 }
