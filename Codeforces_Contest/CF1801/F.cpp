@@ -1,7 +1,7 @@
 /************************
 *FileName:
 *Author: Zimse
-*Data: 2023-02-
+*Data: 2023-01-
 *Description:
 ************************/
 
@@ -25,10 +25,10 @@
 #define no _No()
 #define pb push_back
 #define ll long long
-// #define int long long
-#define M ((L+R)/2)
-#define Lid (id<<1)
-#define Rid (Lid|1)
+ #define int long long
+// #define M ((L+R)/2)
+// #define Lid (id<<1)
+// #define Rid (Lid|1)
 // #define Lid ch[id][0]
 // #define Rid ch[id][1]
 
@@ -56,77 +56,39 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=100007;
+const int N=10000007;
 
-int n,m,q,pr[N],ct[N];
-
-struct edge{
-    int u,v,w;
-    edge(int u=0,int v=0,int w=0):u(u),v(v),w(w){}
-}a[N];
-vector<edge> t[N*4];
-
-int F(int x){
-    if(pr[x]!=x)pr[x]=F(pr[x]);
-    return pr[x];
-}
-
-bool link(edge x){
-    int u=F(x.u),v=F(x.v);
-    if(u!=v){
-        if(ct[u]<ct[v])swap(u,v);
-        pr[v]=u,ct[u]+=ct[v];
-        return true;
-    }
-    return false;
-}
-
-inline void re(int x){
-    pr[x]=x,ct[x]=1;
-    return;
-}
-
-vector<edge> merge(const vector<edge>& x,const vector<edge>& y){
-    vector<edge> res;
-    unsigned i=0,j=0;
-    while(i<x.size()||j<y.size()){
-        if(i<x.size()&&(j>=y.size()||x[i].w<=y[j].w)){
-            if(link(x[i]))res.pb(x[i]);
-            ++i;
-        }
-        else{
-            if(link(y[j]))res.pb(y[j]);
-            ++j;
-        }
-    }
-    for(unsigned k=0;k<res.size();k++)re(res[k].u),re(res[k].v);
-    return res;
-}
-
-void build(int id,int L,int R){
-    if(L==R)t[id].pb(a[L]);
-    else build(Lid,L,M),build(Rid,M+1,R),t[id]=merge(t[Lid],t[Rid]);
-    return;
-}
-
-vector<edge> query(int id,int L,int R,int l,int r){
-    if(l<=L&&r>=R)return t[id];
-    if(r<=M)return query(Lid,L,M,l,r);
-    if(l>M)return query(Rid,M+1,R,l,r);
-    return merge(query(Lid,L,M,l,r),query(Rid,M+1,R,l,r));
-}
+int n,k,a[N],vis[N],v[N],m;
+double f[N];
 
 signed main(){
-    n=read(),m=read(),q=read();
-    for(int i=1;i<=n;i++)re(i);
-    for(int i=1;i<=m;i++)a[i].u=read(),a[i].v=read(),a[i].w=read();
-    build(1,1,m);
-    while(q--){
-        int l=read(),r=read();
-        vector<edge> ans=query(1,1,m,l,r);
-        int sum=0;
-        for(unsigned i=0;i<ans.size();i++)sum+=ans[i].w;
-        _write(sum);
-    }
+	n=read(),k=read();
+	for(int i=1;i<=n;i++)a[i]=read();
+	sort(a+1,a+n+1);
+	for(int i=1;i<=k;i++)vis[k/i+(k%i?1:0)]=1;
+	for(int i=1;i<=k;i++)if(vis[i])v[++m]=i;
+	f[1]=1;
+	for(int i=1;i<=n;i++){
+		for(int j=m;j>=1;j--){
+			if(a[i]>200000&&a[i]>k/2&&v[j]*(n-i+1)>k)continue;
+			int _j=1;
+			for(int l=1,r;l<=a[i];){
+				r=a[i]/(a[i]/l);
+				int L=_j,R=m;
+				while(L<=R){
+					int M=(L+R)/2;
+					if(v[j]*r>=v[M])_j=M,L=M+1;
+					else R=M-1;
+				}
+				double p=1.0/double(a[i])*double(a[i]/r);
+				f[_j]=max(f[_j],f[j]*p);
+				l=r+1;
+				if((a[i]>200000&&a[i]>k/2&&v[_j]*(n-i+1)>k)||_j>=m)break;
+			}
+		}
+	}
+	printf("%.9lf\n",f[m]*double(k));
     return 0;
 }
+
+

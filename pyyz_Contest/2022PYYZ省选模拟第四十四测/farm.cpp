@@ -92,7 +92,7 @@ signed main(){
 //	}
 	
 	sort(p+1,p+n+1,cmp_x);
-	p[n+1]=node(-1,-1);                                                                                    
+	p[n+1]=node(-1,-1);
 	q.push_back(node(0,0)),q.push_back(node(0,H));
 	for(int i=1,j;i<=n;){
 		j=i;

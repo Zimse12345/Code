@@ -1,7 +1,7 @@
 /************************
 *FileName:
 *Author: Zimse
-*Data: 2023-02-
+*Data: 2023-01-
 *Description:
 ************************/
 
@@ -56,60 +56,42 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1024;
+const int N=1000007;
 
-int n,m,tag[N][N],tot;
-char str[N][N];
+int T,n,mx[N],ans;
+multiset<int> s;
 
 struct node{
-    int x,y;
-    node(int x=0,int y=0):x(x),y(y){}
-}p[N*N];
-bool vis_[N*2][N*2];
-queue<node> q;
+	int x,y;
+	node(int x=0,int y=0):x(x),y(y){}
+	bool operator < (const node& _)const{return x<_.x;}
+}p[N];
 
 signed main(){
-//	ifile("t.in");
-    n=read(),m=read();
-    for(int i=1;i<=n;i++)scanf("%s",str[i]+1);
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=m;j++){
-            if(str[i][j]=='o'){
-                if(str[i+1][j]=='o'&&str[i-1][j]=='o'&&str[i][j+1]=='o'&&str[i][j-1]=='o'){
-                    tag[i][j]=1;
-                }
-            }
-        }
-    }
-    for(int i=0;i<=n+1;i++){
-        for(int j=0;j<=m+1;j++)if(i==0||i==n+1||j==0||j==m+1)str[i][j]='#';
-    }
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=m;j++)if(str[i][j]=='o'){
-        	if(!tag[i][j])p[++tot]=node(i,j);
+	T=read();
+	while(T--){
+		n=read(),ans=INF;
+		for(int i=1,a,b;i<=n;i++)a=read(),b=read(),p[i]=node(a,b);
+		sort(p+1,p+n+1);
+		mx[n+1]=0;
+		for(int i=n;i>=1;i--)mx[i]=max(mx[i+1],p[i].y);
+		s.clear();
+		s.insert(-INF),s.insert(INF);
+		for(int i=1;i<=n;i++){
+			set<int>::iterator it=s.upper_bound(p[i].x);
+			if(*it!=INF){
+				_min(ans,_abs(max(*it,mx[i+1])-p[i].x));
+			}
+			--it;
+			if(*it!=-INF){
+				_min(ans,_abs(max(*it,mx[i+1])-p[i].x));
+			}
+			if(i!=n)_min(ans,_abs(mx[i+1]-p[i].x));
+			s.insert(p[i].y);
 		}
-    }
-    q.push(node(0,0));
-    while(!q.empty()){
-        int x=q.front().x,y=q.front().y;
-        q.pop();
-        if(vis_[x+N][y+N]==1)continue;
-        vis_[x+N][y+N]=1;
-        int U=1,D=1,L=1,R=1;
-        for(int i=1;i<=tot;i++){
-            tag[p[i].x+x][p[i].y+y]=1;
-            if(str[p[i].x+x-1][p[i].y+y]=='#')U=0;
-            if(str[p[i].x+x+1][p[i].y+y]=='#')D=0;
-            if(str[p[i].x+x][p[i].y+y-1]=='#')L=0;
-            if(str[p[i].x+x][p[i].y+y+1]=='#')R=0;
-        }
-        if(U)q.push(node(x-1,y));
-        if(D)q.push(node(x+1,y));
-        if(L)q.push(node(x,y-1));
-        if(R)q.push(node(x,y+1));
-    }
-    int ans=0;
-    for(int i=1;i<=n;i++)for(int j=1;j<=m;j++)ans+=tag[i][j];
-    _write(ans);
+		_write(ans);
+	}
     return 0;
 }
+
+

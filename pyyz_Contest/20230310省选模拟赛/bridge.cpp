@@ -54,9 +54,61 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
+int n,m,q,_s,_t,ans,hd[N],h[N],nxt[N],ec=1,d[N],Id[N],U[N],V[N];
+struct edge{
+    int v,f;
+    edge(int v=0,int f=0):v(v),f(f){}
+}E[N];
+inline void add(int u,int v,int f){nxt[++ec]=hd[u],hd[u]=ec,E[ec]=edge(v,f);return;}
+inline void Add(int u,int v,int f){add(u,v,f),add(v,u,f);return;}
 
+queue<int> Q;
+bool bfs(){
+    for(int i=1;i<=n;i++)d[i]=0;
+    d[_s]=1,Q.push(_s);
+    while(!Q.empty()){
+        int u=Q.front();
+        Q.pop();
+        for(int i=hd[u];i;i=nxt[i])if(E[i].f&&!d[E[i].v])d[E[i].v]=d[u]+1,Q.push(E[i].v);
+    }
+    return d[_t];
+}
+
+int dfs(int u,int maxf){
+    if(u==_t||!maxf)return maxf;
+    int flow=0;
+    for(int i=h[u];i;i=nxt[i]){
+        if(d[u]+1==d[E[i].v]){
+            int f=dfs(E[i].v,min(maxf,E[i].f));
+            flow+=f,maxf-=f,E[i].f-=f,E[i^1].f+=f;
+            if(!maxf)break;
+        }
+        h[u]=nxt[h[u]];
+    }
+    if(!flow)d[u]=0;
+    return flow;
+}
+
+int dinic(){
+    int ans=0;
+    while(bfs()){
+        for(int i=1;i<=n;i++)h[i]=hd[i];
+        ans+=dfs(_s,INF);
+    }
+    return ans;
+}
 
 signed main(){
-    
+    n=read(),m=read();
+    for(int i=1;i<=m;i++)U[i]=read(),V[i]=read(),Add(U[i],V[i],1),Id[i]=ec-1;
+    q=read();
+    while(q--){
+        int id=read();
+        _s=U[id],_t=V[id];
+        _write(dinic()-1);
+        for(int i=1;i<=m;i++)if(i!=id&&((d[U[i]]==0&&d[V[i]]!=0)||(d[U[i]]!=0&&d[V[i]]==0)))write_(i);
+        pc(10);
+        for(int i=1;i<=ec;i++)E[i].f=1;
+    }
     return 0;
 }
