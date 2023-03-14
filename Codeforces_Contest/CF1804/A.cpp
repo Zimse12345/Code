@@ -51,36 +51,26 @@ inline ll inv(ll x){return fpow(x,Mod-2);}
 inline int _gcd(int x,int y){return y?_gcd(y,x%y):x;}
 inline int _lcm(int x,int y){return x/_gcd(x,y)*y;}
 inline int _abs(int x){return x<0?-x:x;}
-inline void _max(double& x,double y){if(x<y)x=y;return;}
+inline void _max(int& x,int y){if(x<y)x=y;return;}
 inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=10000007;
+const int N=1000007;
 
-int n,k,a[N],vis[N],v[N],m,num[N];
-double f[N];
-
-inline int updiv(int x,int y){
-	return (x+y-1)/y;
-}
+int T,a,b;
 
 signed main(){
-	n=read(),k=read();
-	for(int i=1;i<=n;i++)a[i]=read();
-	for(int i=1;i<=k;i++)vis[updiv(k,i)]=1;
-	for(int i=1;i<=k;i++)if(vis[i])v[++m]=i,num[i]=m;
-	f[m]=1;
-	for(int i=1;i<=n;i++){
-		for(int j=1;j<=m;j++){
-			for(int l=1,r=0;l<=v[j];l=r+1){
-				if(updiv(v[j],l)==1)r=v[j];
-				else r=updiv(v[j],updiv(v[j],l)-1)-1;
-				_max(f[num[updiv(v[j],l)]],f[j]*double(a[i]/l)/double(a[i]));
-			}
-		}
+	T=read();
+	while(T--){
+		a=_abs(read()),b=_abs(read());
+		int ans=min(a,b)*2;
+		int c=max(a,b)-min(a,b);
+		if(c>0)++ans,--c;
+		if(c>0)ans+=c*2;
+		_write(ans);
 	}
-	printf("%.9lf\n",f[1]*double(k));
     return 0;
 }
+
 

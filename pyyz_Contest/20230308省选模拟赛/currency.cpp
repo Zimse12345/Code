@@ -54,7 +54,7 @@ inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 
 const int N=1000007;
 
-int n,q,T,col[N],nx[N],mx[N],f[N],fl[N],fr[N];
+int n,q,T,col[N],nx[N],mx[N],f[N],ad[N],fl[N],fr[N];
 set<int> pos[N],hd;
 
 void update(int id,int L,int R,int x,int y){
@@ -67,6 +67,35 @@ void update(int id,int L,int R,int x,int y){
     return;
 }
 
+void build(int id,int L,int R){
+    if(L==R)f[id]=L;
+    else build(Lid,L,M),build(Rid,M+1,R),f[id]=L;
+    return;
+}
+
+void pushdown(int id){
+    if(ad[id]){
+        if(Rid<N)ad[Lid]+=ad[id],ad[Rid]+=ad[id];
+        f[id]-=ad[id],ad[id]=0;
+    }
+    return;
+}
+
+void upt(int id,int L,int R,int l,int r,int x){
+    pushdown(id);
+    if(l<=L&&r>=R)ad[id]+=x,pushdown(id);
+    else if(R<l||r<L)return;
+    else upt(Lid,L,M,l,r,x),upt(Rid,M+1,R,l,r,x),f[id]=min(f[Lid],f[Rid]);
+    return;
+}
+
+int qry(int id,int L,int R,int l,int r){
+    pushdown(id);
+    if(l<=L&&r>=R)return f[id];
+    else if(R<l||r<L)return INF;
+    return min(qry(Lid,L,M,l,r),qry(Rid,M+1,R,l,r));
+}
+
 int query(int id,int L,int R,int x){
     if(x<L||mx[id]<=x)return 0;
     if(L==R)return L;
@@ -77,23 +106,21 @@ int query(int id,int L,int R,int x){
 void update(int x,int y){
     if(y<nx[x])nx[x]=y,update(1,1,n,x,y);
     int L=fl[x],R=fr[x];
+    fl[x]=fr[x]=0;
     if(L)while(L<=R){
-        int p=query(1,1,n,L);
-        // printf("[%d %d %d %d]\n",L,R,p,nx[p]);
-        for(int i=L;i<nx[p];i++)f[i]=p;//printf("f[%d]=%d\n",i,p);
+        int p=query(1,1,n,L),to=min(nx[p]-1,R);
+        upt(1,1,n,L,to,p-x);
         fl[p]=L,fr[p]=nx[p]-1,L=nx[p];
     }
     return;
 }
 
 signed main(){
-	// ifile("currency.in");
-	// ofile("currency.out");
-	
     n=read(),q=read(),T=read();
     fl[1]=1,fr[1]=n;
+    build(1,1,n);
     for(int i=1;i<=n;i++){
-        col[i]=i,f[i]=1;
+        col[i]=i;
         update(1,1,n,i,n+1),nx[i]=n+1;
         pos[i].insert(i),pos[i].insert(-INF),pos[i].insert(INF);
         hd.insert(-i);
@@ -118,8 +145,7 @@ signed main(){
             pos[u].insert(*it),col[*it]=u;
         }
         pos[v].clear();
-        ans=n;
-        for(int i=-*hd.begin();i<=n;i++)_min(ans,i-f[i]+1);
+        ans=qry(1,1,n,-*hd.begin(),n);
         _write(ans);
     }
     return 0;
