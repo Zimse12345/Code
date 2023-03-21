@@ -1,7 +1,6 @@
 /*
-Zimse Rectangular Rotation Algorithm
+Rectangular Rotation Algorithm
 O(n^2)
-ZRR
 */
 
 #include <cstdio>

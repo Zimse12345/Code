@@ -59,14 +59,14 @@ int n,m;
 struct poly{
 	int x,y;
     poly(int x=0,int y=0):x(x),y(y){}
-	poly operator + (const poly &_){return poly((x+_.x)%Mod,(y+_.y)%Mod);}
-	poly operator - (const poly &_){return poly((x-_.x+Mod)%Mod,(y-_.y+Mod)%Mod);}
-    poly operator * (const poly &_){return poly(x*_.x%Mod,(x*_.y+y*_.x)%Mod);}
-	poly operator / (const poly &_){
+	poly operator + (const poly &_)const{return poly((x+_.x)%Mod,(y+_.y)%Mod);}
+	poly operator - (const poly &_)const{return poly((x-_.x+Mod)%Mod,(y-_.y+Mod)%Mod);}
+    poly operator * (const poly &_)const{return poly(x*_.x%Mod,(x*_.y+y*_.x)%Mod);}
+	poly operator / (const poly &_)const{
         int i=inv(_.x),rx=x*i%Mod,ry=(y-_.y*rx%Mod+Mod)*i%Mod;
         return poly(rx,ry);
 	}
-    poly operator - (void){return poly(x?Mod-x:x,y?Mod-y:y);}
+    poly operator - (void)const{return poly(x?Mod-x:x,y?Mod-y:y);}
 }a[N][N];
 
 signed main(){

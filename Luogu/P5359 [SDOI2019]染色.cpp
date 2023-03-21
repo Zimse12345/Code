@@ -20,10 +20,7 @@ inline int read(){int qrx=0,qry=1;char qrc=getchar();
 while(qrc<'0'||qrc>'9'){if(qrc=='-'){qry=-1,qrc=getchar();}else qrc=getchar();}
 while(qrc>='0'&&qrc<='9')qrx=qrx*10+qrc-48,qrc=getchar();return qrx*qry;}
 
-const int N=1e5+7,Mod=1e9+9;
-struct arr{
-    
-}
+const int N=1e4+7,Mod=1e9+9;
 int n,c,a[N][2],g[N][5],f1[N],f2[N],ans;
 inline int qp(int x,int k){int res=1;while(k){if(k&1ll)res=(res*x)%Mod;x=(x*x)%Mod,k/=2;}return res;}
 inline int inv(int x){return qp(x,Mod-2);}
