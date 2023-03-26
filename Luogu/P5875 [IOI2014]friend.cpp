@@ -5,7 +5,19 @@
 *Description:
 ********************/
 
-#include <bits/stdc++.h>
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <iostream>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <vector>
+
 #define gc getchar
 #define pc putchar
 #define pb push_back
@@ -31,11 +43,34 @@ inline void _min(int& x,int y){if(y<x)x=y;return;}
 inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
 }using namespace Zimse;using namespace std;
 
-const int N=1000007;
+#include <algorithm>
+const int N=131072;
+int f[N][2];
 
-
+int findSample(int n,int confidence[],int host[],int protocol[]){
+    for(int i=0;i<n;i++)f[i][1]=confidence[i];
+    for(int i=n-1;i>=0;i--){
+        if(i){
+            if(protocol[i]==0){
+                f[host[i]][0]+=std::max(f[i][0],f[i][1]);
+                f[host[i]][1]+=f[i][0];
+            }
+            else if(protocol[i]==1){
+                f[host[i]][1]=std::max(f[host[i]][0],f[host[i]][1]);
+                f[host[i]][0]+=f[i][0];
+                f[host[i]][1]+=std::max(f[i][0],f[i][1]);
+            }
+            else{
+                f[host[i]][1]=std::max(f[host[i]][1]+f[i][0],f[host[i]][0]+f[i][1]);
+                f[host[i]][0]+=f[i][0];
+            }
+        }
+    }
+    return std::max(f[0][0],f[0][1]);
+}
 
 signed main(){
-    
+    int n=4,confidence[4]={3,2,1,4},host[4]={0,0,1,2},protocol[4]={0,1,1,1};
+    _write(findSample(n,confidence,host,protocol));
     return 0;
 }

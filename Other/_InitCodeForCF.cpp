@@ -5,19 +5,7 @@
 *Description:
 ********************/
 
-#include <algorithm>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <iostream>
-#include <map>
-#include <queue>
-#include <set>
-#include <stack>
-#include <vector>
-
+#include <bits/stdc++.h>
 #define gc getchar
 #define pc putchar
 #define yes printf("Yes\n")
