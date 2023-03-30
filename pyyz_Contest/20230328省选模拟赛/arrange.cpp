@@ -1,87 +1,172 @@
-#include <cstdio>
-#include <algorithm>
-#include <iostream>
-#include <cstring>
-#include <vector>
+/********************
+*FileName:
+*Author: Zimse
+*Data: 2023-03-
+*Description:
+********************/
 
+#include <bits/stdc++.h>
+#define gc getchar
+#define pc putchar
+#define pb push_back
+#define inv fpow
 #define int long long
+//#define M ((L+R)/2)
+//#define Lid (id<<1)
+//#define Rid (Lid|1)
 
-using namespace std;
+namespace Zimse{
+const int INF=1000114514,Mod=998244353;//1000000007
+inline int read(){int x=0,y=1;char c=gc();while(c<48||57<c)
+{if(c==45)y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
+inline void WRI(int x){if(x<0)pc(45),x=-x;if(x>=10)WRI(x/10);pc(48+x%10);return;}
+inline void write_(int x){WRI(x),pc(32);return;}
+inline void _write(int x){WRI(x),pc(10);return;}
+inline void ifile(const char str[]){freopen(str,"r",stdin);return;}
+inline void ofile(const char str[]){freopen(str,"w",stdout);return;}
+inline int fpow(int x,int y=Mod-2){int res=1;while(y)
+{if(y&1)res=1ll*res*x%Mod;x=1ll*x*x%Mod,y/=2;}return res;}
+inline void _max(int& x,int y){if(x<y)x=y;return;}
+inline void _min(int& x,int y){if(y<x)x=y;return;}
+inline void addmod(int& x,int y){(x+=y)%=Mod;return;}
+}using namespace Zimse;using namespace std;
 
-inline int read(){
-    int x=0,y=1;
-    char c=getchar();
-    while(c<'0'||c>'9'){
-        if(c=='-')y=-1;
-        c=getchar();
-    }
-    while('0'<=c&&c<='9')x=x*10+c-'0',c=getchar();
-    return x*y;
-}
+const int N=1000007;
 
-const int N=100007;
-int n,q;
-int A[N],P[N],vis[N],pos[N],lcm[N],cnt;
+int n,q,A[N],P[N],vis[N],s[N],tot;
 char opt[16];
-vector<int> s[N];
+set<int> pos[N],Sz;
 
-int gcd(int x,int y){
-    return y?gcd(y,x%y):x;
+struct node{
+    int l,r,fa,sz,ky,mn;
+    node(int l=0,int r=0,int fa=0,int sz=0,int ky=0,int mn=0):l(l),r(r),fa(fa),sz(sz),ky(ky),mn(mn){}
+}t[N];
+
+inline void maintain(int id){
+    t[id].sz=t[t[id].l].sz+t[t[id].r].sz+1;
+    t[id].fa=0,t[id].mn=id;
+    if(t[id].l)t[t[id].l].fa=id,_min(t[id].mn,t[t[id].l].mn);
+    if(t[id].r)t[t[id].r].fa=id,_min(t[id].mn,t[t[id].r].mn);
+    return;
 }
 
-void rebuild(){
-    cnt=0;
-    for(int i=1;i<=n;i++)vis[i]=0,s[i].resize(0);
-    for(int i=1;i<=n;i++)if(!vis[i]){
-        int t=i;
-        while(!vis[t])vis[t]=1,s[i].push_back(t),t=P[t];
-        pos[++cnt]=i;
-        int sz=s[i].size();
-        if(cnt==1)lcm[cnt]=sz;
-        else{
-            int g=gcd(sz,lcm[cnt-1]);
-            if(2000000000000000000/(lcm[cnt-1]/g)<sz)lcm[cnt]=2000000000000000000;
-            else lcm[cnt]=lcm[cnt-1]/g*sz;
+void split(int id,int x,int &l,int &r){
+    if(!id){l=r=0;return;}
+    if(t[t[id].l].sz<x)l=id,split(t[id].r,x-t[t[id].l].sz-1,t[id].r,r);
+    else r=id,split(t[id].l,x,l,t[id].l);
+    maintain(id);
+    return;
+}
+
+int merge(int l,int r){
+    if(!l||!r)return l|r;
+    if(t[l].ky<t[r].ky){
+        t[l].r=merge(t[l].r,r);
+        maintain(l);
+        return l;
+    }
+    t[r].l=merge(l,t[r].l);
+    maintain(r);
+    return r;
+}
+
+inline int qrank(int x){
+    int res=t[x].sz-t[t[x].r].sz;
+    while(t[x].fa){
+        int p=t[x].fa;
+        if(t[p].r==x)res+=1+t[t[p].l].sz;
+        x=p;
+    }
+    return res;
+}
+
+int kth(int id,int k){
+    if(k<=t[t[id].l].sz)return kth(t[id].l,k);
+    if(k>t[t[id].l].sz+1)return kth(t[id].r,k-t[t[id].l].sz-1);
+    return id;
+}
+
+inline void Ins(int sz,int mn){
+    if(pos[sz].empty()){
+        pos[sz].insert(mn);
+        Sz.insert(mn);
+    }
+    else{
+        if(mn<*pos[sz].begin()){
+            Sz.erase(*pos[sz].begin());
+            Sz.insert(mn);
         }
+        pos[sz].insert(mn);
+    }
+    return;
+}
+
+inline void Era(int sz,int mn){
+    pos[sz].erase(mn);
+    if(pos[sz].empty()){
+        Sz.erase(mn);
+    }
+    else if(mn<*pos[sz].begin()){
+        Sz.erase(mn);
+        Sz.insert(*pos[sz].begin());
     }
     return;
 }
 
 signed main(){
-    // freopen("arrange.in","r",stdin);
-    // freopen("arrange.out","w",stdout);
-    
+    srand(time(0));
+    srand(rand());
     n=read(),q=read();
-    for(int i=1;i<=n;i++)A[i]=i,P[i]=i;
-    int tag=0;
+    for(int i=1;i<=n;i++)A[i]=P[i]=i,t[i]=node(0,0,0,1,rand(),i),Ins(1,i);
     while(q--){
         scanf("%s",opt+1);
         int x=read(),y=read();
         if(opt[1]=='s'){
             if(opt[6]=='a')swap(A[x],A[y]);
-            else swap(P[x],P[y]);
-            tag=0;
+            else{
+                int rx=x,ry=y;
+                while(t[rx].fa)rx=t[rx].fa;
+                while(t[ry].fa)ry=t[ry].fa;
+                if(rx==ry){
+                    Era(t[rx].sz,t[rx].mn);
+                    int rk=qrank(x);
+                    int l,r;
+                    split(rx,rk,l,r);
+                    rx=merge(r,l);
+                    rk=qrank(y);
+                    split(rx,rk,l,r);
+                    if(l)Ins(t[l].sz,t[l].mn);
+                    if(r)Ins(t[r].sz,t[r].mn);
+                }
+                else{
+                    Era(t[rx].sz,t[rx].mn);
+                    Era(t[ry].sz,t[ry].mn);
+                    int l,r,rk,p;
+                    rk=qrank(x),split(rx,rk,l,r),rx=merge(r,l);
+                    rk=qrank(y),split(ry,rk,l,r),ry=merge(r,l);
+                    p=merge(rx,ry);
+                    Ins(t[p].sz,t[p].mn);
+                }
+            }
         }
         else{
-            if(!tag){
-                rebuild();
-                tag=1;
+            int tag=1;
+            for(set<int>::iterator it=Sz.begin();it!=Sz.end();it++){
+                int p=*it;
+                while(t[p].fa)p=t[p].fa;
+                int sz=t[p].sz;
+                if(x%sz==y%sz)continue;
+                while(t[p].fa)p=t[p].fa;
+                int mn=t[p].mn,l,r,rk=qrank(mn);
+                split(p,rk-1,l,r),p=merge(r,l);
+                l=A[kth(p,(x-1)%sz+1)],r=A[kth(p,(y-1)%sz+1)];
+                if(l<r)printf("<\n");
+                else printf(">\n");
+                tag=0;
+                break;
             }
-            int L=1,R=cnt,m=0;
-            while(L<=R){
-                int M=(L+R)/2;
-                if(x%lcm[M]==y%lcm[M])L=M+1;
-                else m=M,R=M-1;
-            }
-            if(!m)putchar('='),putchar('\n');
-            else{
-                int p=pos[m],sz=s[p].size();
-                if(A[s[p][(x-1)%sz]]<A[s[p][(y-1)%sz]])putchar('<'),putchar('\n');
-                else putchar('>'),putchar('\n');
-            }
+            if(tag)printf("=\n");
         }
     }
     return 0;
 }
-
-

@@ -40,7 +40,7 @@ inline void SA_init(){
 inline void Get_SA(){
 	for(int i=1;i<=n;i++)c[x[i]=s[i]]++;
 	for(int i=2;i<=m;i++)c[i]+=c[i-1];
-	for(int i=n;i>=1;i--)sa[c[x[i]]--]=i;
+	for(int i=n;i>0;i--)sa[c[x[i]]--]=i;
 	for(int k=1;k<=n;k<<=1){
 		int it=0;
 		for(int i=n-k+1;i<=n;i++)y[++it]=i; 

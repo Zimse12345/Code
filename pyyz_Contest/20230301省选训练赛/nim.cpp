@@ -157,9 +157,9 @@ bool check(int x){
 }
 
 signed main(){
-	// ifile("nim.in");
-	// ofile("nim.out");
-	
+    // ifile("nim.in");
+    // ofile("nim.out");
+
     n=read(),q=read();
     for(int i=1,u,v,w;i<n;i++){
         u=read()+1,v=read()+1,w=read();

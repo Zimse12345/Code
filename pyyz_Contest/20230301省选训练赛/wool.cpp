@@ -89,9 +89,9 @@ int calc(int l,int r,int x){
 }
 
 signed main(){
-	// ifile("wool.in");
-	// ofile("wool.out");
-	
+    // ifile("wool.in");
+    // ofile("wool.out");
+
     T=read();
     while(T--){
         n=read(),m=read(),q=read(),ans=0;

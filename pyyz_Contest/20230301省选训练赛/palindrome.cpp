@@ -84,9 +84,9 @@ int query(int id,int L,int R,int l,int r){
 }
 
 signed main(){
-	// ifile("palindrome.in");
-	// ofile("palindrome.out");
-	
+    // ifile("palindrome.in");
+    // ofile("palindrome.out");
+
     scanf("%s",str+1);
     n=strlen(str+1);
     s[0]='~',s[++cnt]='|';
