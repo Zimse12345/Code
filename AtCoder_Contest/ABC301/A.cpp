@@ -8,6 +8,7 @@
 #define inv fpow
 //#define int long long
 //#define M ((L+R)/2)
+
 namespace Zimse{const int INF=1.01e9,Mod=998244353;
 int read(){int x=0,y=1;char c=gc();while(c<48||57<c){if(c==45)
 y=-1;c=gc();}while(47<c&&c<58)x=x*10+c-48,c=gc();return x*y;}
@@ -23,10 +24,22 @@ inline void addmod(int &x,int y){(x+=y)%=Mod;}
 }using namespace Zimse;using namespace std;
 
 const int N=1.01e6;
-
+int n;
+char str[N];
 
 signed main(){
-    
+    n=read();
+    scanf("%s",str+1);
+    int x=0,y=0;
+    for(int i=1;i<=n;i++){
+        if(str[i]=='T')++x;
+        else ++y;
+    }
+    if(x>y)pc('T');
+    else if(x<y)pc('A');
+    else if(str[n]=='A')pc('T');
+    else pc('A');
+    pc(10);
     return 0;
 }
 
