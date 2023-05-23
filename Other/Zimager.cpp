@@ -119,25 +119,91 @@ struct Player{
         return wrhaco::CheckWin(tile,furo,_tile,NorthCnt,0,is_Riichi,PrevailingWind,DealerWind,*record);
     }
 
+    void Delcard(Tile _tile){
+        int sz=tile.size();
+        vector<Tile> tmp;
+        for(int i=0;i<sz;i++){
+            if(tile[i]==_tile)_tile.suit=0;
+            else tmp.push_back(tile[i]);
+        }
+        swap(tmp,tile);
+        return;
+    }
+
+    Tile Discard(){
+        sort(tile.begin(),tile.end());
+        int sz=tile.size(),p=0;
+        if(tile[0].suit>1)p=sz-1;
+        Tile t=tile[p];
+        Delcard(t);
+        return t;
+    }
+
     Opt Draw(Tile _tile){
         int pt=CheckWin(_tile);
         if(pt)return Opt(pt,Tile(),Id,Id);
         tile.push_back(_tile);
+        for(unsigned i=0;i<tile.size();i++){
+            if(tile[i].suit==4&&tile[i].rank==4){
+                Delcard(tile[i]);
+                return Opt(6,Tile(4,4),Id,-1);
+            }
+        }
         sort(tile.begin(),tile.end());
-        int sz=tile.size(),p=0;
-        vector<Tile> tmp;
-        if(tile[0].suit>1)p=sz-1;
-        for(int i=0;i<sz;i++)if(i!=p)tmp.push_back(tile[i]);
-        swap(tmp,tile);
-        return Opt(2,tmp[p],Id,-1,tmp[p]==_tile);
+        Tile t=Discard();
+        return Opt(2,t,Id,-1,t==_tile);
     }
 
-    Opt CheckTile(Tile _tile){
+    Opt CheckTile(Tile _tile,int from){
+        int pt=CheckWin(_tile);
+        if(pt)return Opt(pt,Tile(),from,Id);
+        int sz=tile.size(),p=0;
+        for(int i=0;i<sz;i++){
+            if(tile[i].suit==_tile.suit&&tile[i].rank==_tile.rank)++p;
+        }
+        if(p==4)return Opt(4,_tile,from,Id);
+        if(p==3)return Opt(3,_tile,from,Id);
         return Opt();
     }
 
     void deal(Tile _tile){
         tile.push_back(_tile);
+        return;
+    }
+
+    Opt Pong(Tile _tile){
+        int sz=tile.size(),p=3;
+        vector<Tile> tmp;
+        for(int i=0;i<sz;i++){
+            if(p>0&&tile[i].suit==_tile.suit&&tile[i].rank==_tile.rank)--p;
+            else tmp.push_back(tile[i]);
+        }
+        swap(tmp,tile);
+        furo.push_back(Furo(_tile,1));
+        return Opt(2,Discard(),Id,-1);
+    }
+
+    void Exposedkong(Tile _tile){
+        int sz=tile.size(),p=4;
+        vector<Tile> tmp;
+        for(int i=0;i<sz;i++){
+            if(p>0&&tile[i].suit==_tile.suit&&tile[i].rank==_tile.rank)--p;
+            else tmp.push_back(tile[i]);
+        }
+        swap(tmp,tile);
+        furo.push_back(Furo(_tile,2));
+        return;
+    }
+
+    void Concealedkong(Tile _tile){
+        int sz=tile.size(),p=4;
+        vector<Tile> tmp;
+        for(int i=0;i<sz;i++){
+            if(p>0&&tile[i].suit==_tile.suit&&tile[i].rank==_tile.rank)--p;
+            else tmp.push_back(tile[i]);
+        }
+        swap(tmp,tile);
+        furo.push_back(Furo(_tile,3));
         return;
     }
 };
@@ -179,30 +245,84 @@ struct Game{
         C.InitRound(PrevailingWind,2,&record);
         Shuffle();
         record.resize(0);
+        vector<int> RoundResult(4);
         
         Deal(A),Deal(B),Deal(C);
         Player *p[3]={&A,&B,&C};
-        int cur=0,point=0;
+        int cur=0;
+        Opt preopt=Opt();
         while(!Wall.empty()){
-            Tile tile=Wall.front();
-            Wall.pop();
-            record.push_back(Opt(1,tile,-1,p[cur]->Id));
-            Opt opt=p[cur]->Draw(tile);
+            Opt opt=Opt();
+            if(!preopt.type){
+                Tile tile=Wall.front();
+                Wall.pop();
+                record.push_back(Opt(1,tile,-1,p[cur]->Id));
+                opt=p[cur]->Draw(tile);
+            }
+            else{
+                if(preopt.type!=6)record.push_back(preopt);
+                if(preopt.type==3)opt=p[cur]->Pong(preopt.tile);
+                if(preopt.type==4){
+                    p[cur]->Exposedkong(preopt.tile);
+                    Tile tile=Wall.front();
+                    Wall.pop();
+                    record.push_back(Opt(1,tile,-1,p[cur]->Id));
+                    opt=p[cur]->Draw(tile);
+                }
+                if(preopt.type==6){
+                    ++p[cur]->NorthCnt;
+                    Tile tile=Wall.front();
+                    Wall.pop();
+                    record.push_back(Opt(1,tile,-1,p[cur]->Id));
+                    opt=p[cur]->Draw(tile);
+                }
+            }
             record.push_back(opt);
             if(opt.type>7){
-                point=opt.type;
+                RoundResult[cur+1]+=opt.type;
+                if(cur){
+                    RoundResult[(cur+1)%3+1]-=opt.type/3;
+                    RoundResult[(cur+2)%3+1]-=opt.type/3;
+                    RoundResult[1]-=opt.type/3;
+                }
+                else{
+                    RoundResult[(cur+1)%3+1]-=opt.type/2;
+                    RoundResult[(cur+2)%3+1]-=opt.type/2;
+                }
                 break;
             }
-            cur=(cur+1)%3;
-        }
-        vector<int> RoundResult(4);
-        if(point){
-            for(int i=1;i<=3;i++)RoundResult[i]-=point/2;
-            RoundResult[cur+1]+=point;
+            if(opt.type==6){
+                preopt=opt;
+                continue;
+            }
+            if(opt.type==2){
+                Opt opt1=p[(cur+1)%3]->CheckTile(opt.tile,cur);
+                Opt opt2=p[(cur+2)%3]->CheckTile(opt.tile,cur);
+                if(opt1.type>7||opt2.type>7){
+                    if(opt1.type>7){
+                        RoundResult[cur+1]-=opt1.type;
+                        RoundResult[(cur+1)%3+1]+=opt1.type;
+                    }
+                    if(opt2.type>7){
+                        RoundResult[cur+1]-=opt2.type;
+                        RoundResult[(cur+2)%3+1]+=opt2.type;
+                    }
+                    break;
+                }
+                else if(opt1.type==3||opt1.type==4){
+                    preopt=opt1,cur=(cur+1)%3;
+                    continue;
+                }
+                else if(opt2.type==3||opt2.type==4){
+                    preopt=opt2,cur=(cur+2)%3;
+                    continue;
+                }
+            }
+            preopt=Opt(),cur=(cur+1)%3;
         }
         return RoundResult;
     }
-    vector<int> StartContest(Player &A,Player &B,Player &C){
+    vector<int> StartContest(Player &A,Player &B,Player &C,int ContestType=0){
         A.InitPlayer(0),B.InitPlayer(1),C.InitPlayer(2);
         vector<int> res=StartRound(A,B,C,0);
         vector<int> ContestResult(4);
