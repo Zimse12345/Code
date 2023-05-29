@@ -322,6 +322,7 @@ struct Game{
         }
         return RoundResult;
     }
+    
     vector<int> StartContest(Player &A,Player &B,Player &C,int ContestType=0){
         A.InitPlayer(0),B.InitPlayer(1),C.InitPlayer(2);
         vector<int> res=StartRound(A,B,C,0);
