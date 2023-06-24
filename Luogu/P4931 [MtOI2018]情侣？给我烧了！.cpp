@@ -3,7 +3,7 @@
 #define pc putchar
 #define pb push_back
 #define inv fpow
-//#define int long long
+#define int long long
 //#define M ((L+R)/2)
 namespace OI{const int INF=1.001e9,Mod=998244353;int read(){int x=0
 ,y=1;char c=getchar();while(c<48||57<c){if(c==45)y=-1;c=getchar();}
@@ -16,30 +16,24 @@ x*z%Mod;x=x*x%Mod,y/=2;}return z;}inline void _max(int&x,int y){if(
 x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
-const int N=1000007;
+const int N=1.01e6;
+int T,n,fac[N],ifac[N],g[N];
 
-int n,a[N],b[N],l[N],r[N],f[N];
-vector<int> s[N];
-
-signed main(){
-	n=read();
-	for(int i=1;i<=n;i++)a[i]=read(),b[i]=read();
-	for(int i=1,p=1;i<=n;i++){
-		while(b[p]<a[i])++p;
-		l[i]=p;
-	}
-	for(int i=n,p=n;i>=1;i--){
-		while(a[p]>b[i])--p;
-		r[i]=p,s[p].pb(l[i]);
-	}
-	f[0]=1;
-	for(int i=1;i<=n;i++){
-		f[i]=2*f[i-1]%Mod;
-		for(unsigned j=0;j<s[i].size();j++)_mod(f[i],-f[s[i][j]-1]);
-	}
-	_mod(f[n],Mod);
-	_wri(f[n]);
-    return 0;
+inline int C(int x,int y){
+    return fac[x]*ifac[y]%Mod*ifac[x-y]%Mod;
 }
 
+signed main(){
+    fac[0]=ifac[0]=1;
+    for(int i=1;i<N;i++)fac[i]=fac[i-1]*i%Mod,ifac[i]=inv(fac[i]);
+
+    g[0]=1;
+    for(int i=2;i<N;i++)g[i]=2*i*(2*i-2)%Mod*(g[i-1]+(i-1)*2*g[i-2]%Mod)%Mod;
+    T=read();
+    while(T--){
+        n=read();
+        for(int i=0;i<=n;i++)_wri(C(n,i)*C(n,i)%Mod*fpow(2,i)%Mod*fac[i]%Mod*g[n-i]%Mod);
+    }
+    return 0;
+}
 

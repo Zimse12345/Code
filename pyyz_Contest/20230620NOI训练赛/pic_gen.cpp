@@ -16,30 +16,39 @@ x*z%Mod;x=x*x%Mod,y/=2;}return z;}inline void _max(int&x,int y){if(
 x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
-const int N=1000007;
+const int N=1.01e6;
+const int T[5]={10000,10000,1000,500,200};
+const int min_N[5]={60,60,9000,9000,80000};
+const int max_N[5]={100,100,10000,10000,100000};
+const int m[5]={200,500,10000,40000,100000};
+int id,n[N];
 
-int n,a[N],b[N],l[N],r[N],f[N];
-vector<int> s[N];
-
-signed main(){
-	n=read();
-	for(int i=1;i<=n;i++)a[i]=read(),b[i]=read();
-	for(int i=1,p=1;i<=n;i++){
-		while(b[p]<a[i])++p;
-		l[i]=p;
-	}
-	for(int i=n,p=n;i>=1;i--){
-		while(a[p]>b[i])--p;
-		r[i]=p,s[p].pb(l[i]);
-	}
-	f[0]=1;
-	for(int i=1;i<=n;i++){
-		f[i]=2*f[i-1]%Mod;
-		for(unsigned j=0;j<s[i].size();j++)_mod(f[i],-f[s[i][j]-1]);
-	}
-	_mod(f[n],Mod);
-	_wri(f[n]);
-    return 0;
+inline int rd(){
+    int x=rand()%8192,y=rand()%8192;
+    return x*8192+y;
 }
 
+signed main(){
+    srand(time(0));
+    iF("pre.txt");
+    id=(read()+1)%5;
+    fclose(stdin);
+    oF("pre.txt");
+    _wri(id);
+    fclose(stdout);
+    oF("pic.in");
+    printf("%d 0.0 0.0 0.0 0.0 %d %d %d\n",T[id],min_N[id],max_N[id],m[id]);
+    for(int i=1;i<=T[id];i++){
+        n[i]=min_N[id]+rd()%(max_N[id]-min_N[id]+1);
+        for(int j=1;j<=m[id];j++){
+            int s=rd()%n[i]+1;
+            while(s)pc(s%3+'a'),s/=3;
+            pc(10);
+        }
+    }
+    fclose(stdout);
+    oF("pic.ans");
+    for(int i=1;i<=T[id];i++)_wri(n[i]);
+    return 0;
+}
 

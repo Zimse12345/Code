@@ -62,35 +62,35 @@ int n,mu[N],pr[N],prime[N],tot;
 int ff[N],F[N],G[N];
 
 signed main(){
-	mu[1]=1;
-	for(int i=2;i<N;i++){
-		if(!pr[i])pr[i]=i,mu[i]=-1,prime[++tot]=i;
-		for(int j=1;j<=tot&&i*prime[j]<N;j++){
-			pr[i*prime[j]]=prime[j],mu[i*prime[j]]=-mu[i];
-			if(pr[i]==prime[j]){mu[i*prime[j]]=0;break;}
-		}
-	}
-	n=read();
-	int ans=0;
-	for(int d=1;d<=n;d++){
-		for(int k=1;k*d<=n;k++){
-			for(int s=1;s*k*d<=n;s++){
-				addmod(ff[s*k*d],mu[d]*k*(s-1));
-			}
-		}
-	}
-	for(int i=1,s=0,ss=0;i<=n;i++){
-		F[i]=s;
-		ss+=ff[i];
-		s+=ss;
-	}
-	for(int d=1;d<=n;d++){
-		for(int k=1;k*d<=n;k++)addmod(G[k*d],mu[k]*d%Mod*k%Mod*k%Mod);
-	}
-	for(int i=1;i<=n;i++)if(n%i==0)addmod(ans,F[i]*G[n/i]);
-	addmod(ans,Mod);
-	_write(ans);
-	return 0;
+    mu[1]=1;
+    for(int i=2;i<N;i++){
+        if(!pr[i])pr[i]=i,mu[i]=-1,prime[++tot]=i;
+        for(int j=1;j<=tot&&i*prime[j]<N;j++){
+            pr[i*prime[j]]=prime[j],mu[i*prime[j]]=-mu[i];
+            if(pr[i]==prime[j]){mu[i*prime[j]]=0;break;}
+        }
+    }
+    n=read();
+    int ans=0;
+    for(int d=1;d<=n;d++){
+        for(int k=1;k*d<=n;k++){
+            for(int s=1;s*k*d<=n;s++){
+                addmod(ff[s*k*d],mu[d]*k*(s-1));
+            }
+        }
+    }
+    for(int i=1,s=0,ss=0;i<=n;i++){
+        F[i]=s;
+        ss+=ff[i];
+        s+=ss;
+    }
+    for(int d=1;d<=n;d++){
+        for(int k=1;k*d<=n;k++)addmod(G[k*d],mu[k]*d%Mod*k%Mod*k%Mod);
+    }
+    for(int i=1;i<=n;i++)if(n%i==0)addmod(ans,F[i]*G[n/i]);
+    addmod(ans,Mod);
+    _write(ans);
+    return 0;
 }
 
 

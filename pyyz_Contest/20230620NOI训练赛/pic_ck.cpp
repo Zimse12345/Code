@@ -16,30 +16,30 @@ x*z%Mod;x=x*x%Mod,y/=2;}return z;}inline void _max(int&x,int y){if(
 x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
-const int N=1000007;
-
-int n,a[N],b[N],l[N],r[N],f[N];
-vector<int> s[N];
+const int N=1.01e6;
+int n;
+double a[N],b[N],s;
 
 signed main(){
-	n=read();
-	for(int i=1;i<=n;i++)a[i]=read(),b[i]=read();
-	for(int i=1,p=1;i<=n;i++){
-		while(b[p]<a[i])++p;
-		l[i]=p;
-	}
-	for(int i=n,p=n;i>=1;i--){
-		while(a[p]>b[i])--p;
-		r[i]=p,s[p].pb(l[i]);
-	}
-	f[0]=1;
-	for(int i=1;i<=n;i++){
-		f[i]=2*f[i-1]%Mod;
-		for(unsigned j=0;j<s[i].size();j++)_mod(f[i],-f[s[i][j]-1]);
-	}
-	_mod(f[n],Mod);
-	_wri(f[n]);
+    iF("pic.in");
+    n=read();
+    fclose(stdin);
+    iF("pic.out");
+    for(int i=1;i<=n;i++)a[i]=read();
+    fclose(stdin);
+    iF("pic.ans");
+    int x=0,y=0;
+    for(int i=1;i<=n;i++)b[i]=read();
+//    sort(a+1,a+n+1),sort(b+1,b+n+1);
+    for(int i=1;i<=n;i++){
+        if(a[i]<b[i])++x;
+        if(a[i]>b[i])++y;
+        s+=(a[i]-b[i])*(a[i]-b[i]);
+    }
+    s/=double(n);
+    s=sqrt(s);
+    printf("Value=%.7lf   %d %d\n",s,x,y);
+//    for(int i=1;i<=n;i++)printf("%.0lf %.0lf\n",a[i],b[i]);
     return 0;
 }
-
 

@@ -16,30 +16,30 @@ x*z%Mod;x=x*x%Mod,y/=2;}return z;}inline void _max(int&x,int y){if(
 x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
-const int N=1000007;
-
-int n,a[N],b[N],l[N],r[N],f[N];
-vector<int> s[N];
+const int N=1.01e6;
+int T,n,m,f[4200][4200],ans;
+char A[N],B[N];
 
 signed main(){
-	n=read();
-	for(int i=1;i<=n;i++)a[i]=read(),b[i]=read();
-	for(int i=1,p=1;i<=n;i++){
-		while(b[p]<a[i])++p;
-		l[i]=p;
-	}
-	for(int i=n,p=n;i>=1;i--){
-		while(a[p]>b[i])--p;
-		r[i]=p,s[p].pb(l[i]);
-	}
-	f[0]=1;
-	for(int i=1;i<=n;i++){
-		f[i]=2*f[i-1]%Mod;
-		for(unsigned j=0;j<s[i].size();j++)_mod(f[i],-f[s[i][j]-1]);
-	}
-	_mod(f[n],Mod);
-	_wri(f[n]);
+    iF("transform.in");
+    oF("transform.out");
+    
+    T=read();
+    while(T--){
+        scanf("%s",A+1);
+        scanf("%s",B+1);
+        n=strlen(A+1),m=strlen(B+1);
+        B[m+1]='#',ans=0;
+        for(int j=1;j<=n;j++){
+            for(int i=j;i>=1;i--){
+                f[i][j]=max(f[i+1][j],f[i][j-1]);
+                if(A[i]==B[f[i+1][j]+1])_max(f[i][j],f[i+1][j]+1);
+                if(A[j]==B[f[i][j-1]+1])_max(f[i][j],f[i][j-1]+1);
+                if(f[i][j]>=m)++ans;
+            }
+        }
+        _wri(ans);
+    }
     return 0;
 }
-
 
