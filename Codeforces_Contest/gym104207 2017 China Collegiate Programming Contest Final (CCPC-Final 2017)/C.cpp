@@ -16,10 +16,22 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,x,y,k;
 
 signed main(){
-    
+    T=read();
+    for(int i=1;i<=T;i++){
+        x=read(),y=read(),k=read();
+        int nd=y*11-x*9,ans=0;
+        if(nd<=0||x>y)ans=k;
+        else{
+            for(int i=1;i<=k;i++)if(nd*(k-i)<=x*i*11){
+                ans=k-i;
+                break;
+            }
+        }
+        printf("Case #%d: %d\n",i,ans);
+    }
     return 0;
 }
 

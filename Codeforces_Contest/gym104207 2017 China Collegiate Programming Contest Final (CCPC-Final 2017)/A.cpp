@@ -16,10 +16,20 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,n;
+double p[N];
 
 signed main(){
-    
+    T=read();
+    for(int i=1;i<N;i++){
+        double t=1.0/i;
+        p[i]=(p[i-1]+1.0)*t;
+        if(i>1)p[i]+=(p[i-1]-p[i-1]/double(i-1))*(1-t);
+    }
+    for(int i=1;i<=T;i++){
+        n=read();
+        printf("Case #%d: %.7lf\n",i,n-p[n]);
+    }
     return 0;
 }
 

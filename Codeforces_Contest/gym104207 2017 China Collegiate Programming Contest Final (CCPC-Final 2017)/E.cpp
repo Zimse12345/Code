@@ -16,10 +16,20 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,n,a[N];
 
 signed main(){
-    
+    T=read();
+    for(int i=1;i<=T;i++){
+        int sum=0;
+        n=read();
+        for(int j=1;j<=n;j++){
+            a[j]=read();
+            sum+=a[j]+a[j]/10;
+            if(a[j]%10)++sum;
+        }
+        printf("Case #%d: %d\n",i,sum);
+    }
     return 0;
 }
 

@@ -3,7 +3,8 @@
 #define pc putchar
 #define pb push_back
 #define inv fpow
-// #define int long long
+//#define int long long
+//#define M ((L+R)/2)
 namespace OI{const int INF=1.001e9,Mod=998244353;int read(){int x=0
 ,y=1;char c=getchar();while(c<48||57<c){if(c==45)y=-1;c=getchar();}
 while(47<c&&c<58)x=x*10+c-48,c=getchar();return x*y;}void wr(int x)
@@ -16,10 +17,25 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,n,x,a[N]; 
 
 signed main(){
-    
+    T=read();
+    while(T--){
+        n=read(),x=read();
+        int s=0;
+        for(int t=1;t<=3;t++){
+            for(int i=1;i<=n;i++)a[i]=read();
+            for(int i=1;i<=n;i++){
+                if((a[i]|x)==x)s|=a[i];
+                else break;
+            }
+        }
+        if(s==x)printf("Yes\n");
+        else printf("No\n");
+    }
     return 0;
 }
+
+
 
