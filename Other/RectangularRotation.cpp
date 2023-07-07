@@ -78,6 +78,7 @@ B+(n-1)m+1 .. B+nm
                 upt(Id[i][j],Id[i-1][j],Id[i][j+1],Id[i+1][j],Id[i][j-1]);
             }
         }
+        return;
     }
 
     inline void GoDown(node& s){
