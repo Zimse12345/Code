@@ -16,10 +16,32 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
- 
+int T,n,m,d,fa[N];
+
+inline int F(int x){
+    if(fa[x]^x)fa[x]=F(fa[x]);
+    return fa[x];
+}
 
 signed main(){
+    iF("graph.in");
+    oF("graph.out");
     
+    T=read();
+    while(T--){
+        n=read(),m=read();
+        for(int i=1;i<=n;i++)fa[i]=i;
+        int ans=n;
+        while(m--){
+            d=read();
+            for(int i=1;i+d<=n;i++){
+                int u=F(i),v=F(i+d);
+                if(u^v)fa[v]=u,--ans;
+            }
+        }
+        _wri(ans);
+    }
     return 0;
 }
+
 

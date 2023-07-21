@@ -3,7 +3,7 @@
 #define pc putchar
 #define pb push_back
 #define inv fpow
-// #define int long long
+ #define int long long
 namespace OI{const int INF=1.001e9,Mod=998244353;int read(){int x=0
 ,y=1;char c=getchar();while(c<48||57<c){if(c==45)y=-1;c=getchar();}
 while(47<c&&c<58)x=x*10+c-48,c=getchar();return x*y;}void wr(int x)
@@ -16,10 +16,39 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
- 
+int T,n,m,a[N],ans,del;
+priority_queue<int,vector<int>,greater<int>> Q;
 
 signed main(){
-    
-    return 0;
+	T=read();
+	while (T--){
+		ans=n=read(),m=read(),del=0;
+		for(int i=1;i<=m;i++)a[i]=read(),Q.push(a[i]);
+		while(!Q.empty()){
+		    int x=0,y=0;
+			x=Q.top()-del,Q.pop();
+            if(!x)continue;
+			if(Q.empty()){
+				ans-=n-x;
+				break;
+			}
+			y=Q.top()-del,Q.pop();
+			int c=y/x;
+			if(c<n/x){
+				ans-=c*x,n-=c*x;
+				Q.push(y+del);
+				del+=c*x;
+				Q.push(x+del);
+			}
+			else{
+			    int d=n/x-1;
+				ans-=d*x+n%x,n-=(d+1)*x;
+				Q.push(y+del);
+				del+=(d+1)*x;
+			}
+		}
+		_wri(ans);
+	}
+	return 0;
 }
 
