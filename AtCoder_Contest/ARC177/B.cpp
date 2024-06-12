@@ -1,4 +1,4 @@
-// Author:Zimse  Data:2024-06-
+// Author:Zimse  Data:2023-07-
 #include <bits/stdc++.h>
 #define pc putchar
 #define pb push_back
@@ -16,10 +16,28 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int n,cnt;
+char s[N],ans[N];
 
 signed main(){
-    
+    n=read();
+    scanf("%s",s+1);
+    int l=1;
+    while(l<=n){
+        if(s[l]=='1'){
+            int r=l;
+            while(s[r]=='1')++r;
+            for(int i=1;i<l;i++)ans[++cnt]='B';
+            for(int i=1;i<r;i++)ans[++cnt]='A';
+            l=r;
+        }
+        else ++l;
+    }
+    _wri(cnt);
+    for(int i=cnt;i>=1;i--)pc(ans[i]);
+    pc(10);
     return 0;
 }
+
+
 
