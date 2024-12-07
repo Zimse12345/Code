@@ -3,7 +3,7 @@
 #define pc putchar
 #define pb push_back
 #define inv fpow
-// #define int long long
+ #define int long long
 namespace OI{const int INF=1.001e9,Mod=998244353;int read(){int x=0
 ,y=1;char c=getchar();while(c<48||57<c){if(c==45)y=-1;c=getchar();}
 while(47<c&&c<58)x=x*10+c-48,c=getchar();return x*y;}void wr(int x)
@@ -16,10 +16,20 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,x,m;
 
 signed main(){
-    
+    cin>>T;
+    while(T--){
+        cin>>x>>m;
+        int ans=0;
+        for(int i=1;i<=m&&i<=x*8;i++)if(i!=x){
+            int v=(x^i);
+            if(i%v==0||x%v==0)++ans;
+        }
+        printf("%lld\n",ans);
+    }
     return 0;
 }
+
 

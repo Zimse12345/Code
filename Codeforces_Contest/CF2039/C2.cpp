@@ -3,7 +3,7 @@
 #define pc putchar
 #define pb push_back
 #define inv fpow
-// #define int long long
+ #define int long long
 namespace OI{const int INF=1.001e9,Mod=998244353;int read(){int x=0
 ,y=1;char c=getchar();while(c<48||57<c){if(c==45)y=-1;c=getchar();}
 while(47<c&&c<58)x=x*10+c-48,c=getchar();return x*y;}void wr(int x)
@@ -16,10 +16,35 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,x,m;
 
 signed main(){
-    
+    cin>>T;
+    while(T--){
+        cin>>x>>m;
+        int ans=0;
+        for(int i=1;i<=m&&i<=x*4;i++){
+            int v=(x^i);
+            if(v%i==0||v%x==0)++ans;
+        }
+        int l=1,r=m/x+1;
+        if(l<=r){
+            for(int k=1;k<=x*2+100;k++){
+                if(r<l)break;
+                int y=((l*x)^x);
+                if(x*4<y&&y<=m)++ans;
+                ++l;
+                if(r<l)break;
+                y=((r*x)^x);
+                if(x*4<y&&y<=m)++ans;
+                --r;
+            }
+            if(l<=r)ans+=(r-l+1);
+            
+        }
+        printf("%lld\n",ans);
+    }
     return 0;
 }
+
 

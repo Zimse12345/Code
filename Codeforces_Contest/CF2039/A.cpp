@@ -16,10 +16,16 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,n;
 
 signed main(){
-    
+    cin>>T;
+    while(T--){
+        cin>>n;
+        for(int i=1;i<=n;i++)printf("%d ",i*2-1);
+        printf("\n");
+    }
     return 0;
 }
+
 

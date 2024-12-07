@@ -16,10 +16,27 @@ x<y)x=y;}inline void _min(int&x,int y){if(y<x)x=y;}inline void _mod
 (int&x,int y){(x+=y)%=Mod;}}using namespace OI;using namespace std;
 
 const int N=1.01e6;
-
+int T,n,m,b[N],a[N];
 
 signed main(){
-    
+    cin>>T;
+    while(T--){
+        cin>>n>>m;
+        for(int i=1;i<=m;i++)cin>>b[i];
+        sort(b+1,b+m+1);
+        for(int i=1;i<=n;i++)a[i]=m;
+        int tag=1;
+        for(int tt=1;tt<=7;tt++)for(int i=1;i<=n;i++){
+            if(a[i]<1)tag=0;
+            for(int j=i+i;j<=n;j+=i)if(a[j]==a[i])--a[j];
+        }
+        if(tag){
+            for(int i=1;i<=n;i++)printf("%d ",b[a[i]]);
+            printf("\n");
+        }
+        else printf("-1\n");
+    }
     return 0;
 }
+
 
