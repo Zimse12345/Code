@@ -31,9 +31,9 @@ signed main(){
                 int v=f[i-1][p][q];
                 _mod(f[i][p][q],v);
                 if(p==0&&q==0)(v*=i)%=Mod;
-                if(p<x&&s[i]==a[p+1])_mod(f[i][p+1][q],v);
-                if(q<y&&s[i]==b[q+1])_mod(f[i][p][q+1],v);
-                if(p<x&&q<y&&s[i]==a[p+1]&&s[i]==b[q+1])_mod(f[i][p+1][q+1],v);
+                if(s[i]==a[p+1])_mod(f[i][p+1][q],v);
+                if(s[i]==b[q+1])_mod(f[i][p][q+1],v);
+                if(s[i]==a[p+1]&&s[i]==b[q+1])_mod(f[i][p+1][q+1],v);
             }
         }
         _mod(ans,f[i][x][y]);

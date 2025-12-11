@@ -43,11 +43,11 @@ public:
     	if(!id){l=r=0;return;}
     	if(t[t[id].l].siz+1<=x){
     	    l=id;
-            split(t[id].r,x-t[t[id].l].siz-1,t[id].r,r);
+            split_size(t[id].r,x-t[t[id].l].siz-1,t[id].r,r);
         }
     	else{
     	    r=id;
-            split(t[id].l,x,l,t[id].l);
+            split_size(t[id].l,x,l,t[id].l);
         }
     	update(id);
         return;
